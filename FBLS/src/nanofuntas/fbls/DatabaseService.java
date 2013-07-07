@@ -7,6 +7,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.json.simple.JSONObject;
+
 public class DatabaseService {
 	private static boolean DEBUG = true;
 	private static final String TAG = "DataBaseService";
@@ -168,14 +170,14 @@ public class DatabaseService {
 		
 	}
 	
-	public static void setPlayerRating(long uid, String key, int value) {
+	public static void setPlayerRating(long uid, String key, long value) {
 		if(DEBUG) System.out.println(TAG + ": setPlayerRating()");
 		
 		conn = getDBConnection();
 		PreparedStatement ps = null;
 		try {
 			ps = conn.prepareStatement("UPDATE PLAYER_RATING SET " + key + " = ? WHERE UID = ?");
-			ps.setInt(1, value);
+			ps.setLong(1, value);
 			ps.setLong(2, uid);
 			ps.executeUpdate();		
 			
@@ -227,6 +229,5 @@ public class DatabaseService {
 		return result;
 	}
 
-	
 }
 

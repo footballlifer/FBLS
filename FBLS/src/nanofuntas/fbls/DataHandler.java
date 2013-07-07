@@ -23,15 +23,15 @@ public class DataHandler {
 		
 		JSONObject jsonRsp = new JSONObject();
 		
-		if (mReqType.equals(Config.KEY_REQ_LOGIN)) {
+		if (mReqType.equals(Config.KEY_REQ_TYPE_LOGIN)) {
 			String strEmail = (String) jsonReq.get(Config.KEY_EMAIL);
 			String strPassword = (String) jsonReq.get(Config.KEY_PASSWORD);
 
 			long uid = DatabaseService.login(strEmail, strPassword);
-			jsonRsp.put(Config.KEY_RSP_TYPE, Config.KEY_RSP_LOGIN);
+			jsonRsp.put(Config.KEY_RSP_TYPE, Config.KEY_RSP_TYPE_LOGIN);
 			jsonRsp.put(Config.KEY_RESULT, uid);
 			
-		} else if (mReqType.equals(Config.KEY_REQ_REGISTER)) {
+		} else if (mReqType.equals(Config.KEY_REQ_TYPE_REGISTER)) {
 			String strEmail = (String) jsonReq.get(Config.KEY_EMAIL);
 			String strPassword = (String) jsonReq.get(Config.KEY_PASSWORD);
 			
@@ -39,37 +39,60 @@ public class DataHandler {
 			
 			//make sure user is registered and return uid for registering
 			long uid = DatabaseService.login(strEmail, strPassword);
-			jsonRsp.put(Config.KEY_RSP_TYPE, Config.KEY_RSP_LOGIN);
+			jsonRsp.put(Config.KEY_RSP_TYPE, Config.KEY_RSP_TYPE_LOGIN);
 			jsonRsp.put(Config.KEY_RESULT, uid);
 			
-		} else if(mReqType.equals(Config.KEY_REQ_STATUS)) {
-			long uid = (Long) jsonReq.get(Config.KEY_UID);
+		} else if(mReqType.equals(Config.KEY_REQ_TYPE_STATUS)) {
+			long uid = (Long) jsonReq.get(Config.KEY_UID);			
+			jsonRsp.put(Config.KEY_RSP_TYPE, Config.KEY_RSP_TYPE_STATUS);
 			
-			if (DEBUG) System.out.println(TAG + ", UID =  " + uid);	
+			for (String s: Config.PROFILE_ARRAY) {
+				jsonRsp.put(s, DatabaseService.getPlayerProfile(uid, s));
+			}
+			for (String s: Config.RATING_ALL_ARRAY) { 
+				jsonRsp.put(s, DatabaseService.getPlayerRating(uid, s));
+			}
 			
-			jsonRsp.put(Config.KEY_RSP_TYPE, Config.KEY_RSP_STATUS);
+		} else if(mReqType.equals(Config.KEY_REQ_TYPE_RATING)) {
+			long uid = (Long) jsonReq.get(Config.KEY_UID);			
+			JSONObject jsonRating = (JSONObject) jsonReq.get(Config.KEY_RATING);
+			long totalRated = DatabaseService.getPlayerRating(uid, Config.KEY_TOTAL_RATED);
 			
-			jsonRsp.put(Config.KEY_NAME, DatabaseService.getPlayerProfile(uid, Config.KEY_NAME));
-			jsonRsp.put(Config.KEY_POSITION, DatabaseService.getPlayerProfile(uid, Config.KEY_POSITION));
-			
-			jsonRsp.put(Config.KEY_ATTACK, DatabaseService.getPlayerRating(uid, Config.KEY_ATTACK));
-			jsonRsp.put(Config.KEY_DEFENSE, DatabaseService.getPlayerRating(uid, Config.KEY_DEFENSE));
-			jsonRsp.put(Config.KEY_TEAMWORK, DatabaseService.getPlayerRating(uid, Config.KEY_TEAMWORK));
-			jsonRsp.put(Config.KEY_MENTAL, DatabaseService.getPlayerRating(uid, Config.KEY_MENTAL));
-			jsonRsp.put(Config.KEY_POWER, DatabaseService.getPlayerRating(uid, Config.KEY_POWER));
-			jsonRsp.put(Config.KEY_SPEED, DatabaseService.getPlayerRating(uid, Config.KEY_SPEED));
-			jsonRsp.put(Config.KEY_STAMINA, DatabaseService.getPlayerRating(uid, Config.KEY_STAMINA));
-			jsonRsp.put(Config.KEY_BALL_CONTROL, DatabaseService.getPlayerRating(uid, Config.KEY_BALL_CONTROL));
-			jsonRsp.put(Config.KEY_PASS, DatabaseService.getPlayerRating(uid, Config.KEY_PASS));
-			jsonRsp.put(Config.KEY_SHOT, DatabaseService.getPlayerRating(uid, Config.KEY_SHOT));
-			jsonRsp.put(Config.KEY_HEADER, DatabaseService.getPlayerRating(uid, Config.KEY_HEADER));
-			jsonRsp.put(Config.KEY_CUTTING, DatabaseService.getPlayerRating(uid, Config.KEY_CUTTING));
-			jsonRsp.put(Config.KEY_TEMPER, DatabaseService.getPlayerRating(uid, Config.KEY_TEMPER));
-			jsonRsp.put(Config.KEY_OVERALL, DatabaseService.getPlayerRating(uid, Config.KEY_OVERALL));
+			for (String s: Config.RATING_WITHOUT_OVERALL_ARRAY) {
+				setNewRating(uid, s, jsonRating, totalRated);
+			}
+
+			totalRated ++;
+					
+			DatabaseService.setPlayerRating(uid, Config.KEY_TOTAL_RATED, totalRated);
+			setOverallRating(uid);
+			jsonRsp.put(Config.KEY_RSP_TYPE, Config.KEY_RSP_TYPE_RATING);
+			jsonRsp.put(Config.KEY_RESULT, Config.KEY_OK);
 			
 		}
-		return jsonRsp;
-		
+		return jsonRsp;		
 	}
+	
+	private static void setNewRating(long uid, String key, JSONObject jsonRating, long totalRated) {
+		long ratingNow = DatabaseService.getPlayerRating(uid, key);
+		long newRating = (Long) jsonRating.get(key);
 
+		if (totalRated != 0) {
+			newRating = (ratingNow * totalRated + newRating) / (totalRated + 1);						
+		}
+
+		DatabaseService.setPlayerRating(uid, key, newRating);
+	}
+	
+	private static void setOverallRating(long uid) {
+		long total = 0;
+		
+		for (String s: Config.RATING_WITHOUT_OVERALL_ARRAY) {
+			total += DatabaseService.getPlayerRating(uid, s);
+		}
+				
+		long newOverall = total / Config.NUMBER_OF_RATING_ITEM;
+		DatabaseService.setPlayerRating(uid, Config.KEY_OVERALL, newOverall);		
+	}
+	
 }
