@@ -7,8 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import org.json.simple.JSONObject;
-
 public class DatabaseService {
 	private static boolean DEBUG = true;
 	private static final String TAG = "DataBaseService";
@@ -42,9 +40,8 @@ public class DatabaseService {
 		return conn;
 	}
 	
-	
 	public static long login(String email, String pw){
-		if(DEBUG) System.out.println(TAG + ": login()");
+		if(DEBUG) System.out.println(TAG + ": login(), Email:"+email+",Password:"+pw);
 
 		long uid = -1; // return -1 if not registered
 		conn = getDBConnection();
@@ -55,31 +52,22 @@ public class DatabaseService {
 			st = conn.createStatement();
 			rs = st.executeQuery("select * from USER_LOGIN_INFO");
 			
-			while(rs.next()){
+			while(rs.next()) {
 				if( rs.getString(Config.KEY_EMAIL).equals(email) && 
 						rs.getString(Config.KEY_PASSWORD).equals(pw) )
 					uid = rs.getLong(Config.KEY_UID); // return uid for successful login
-			}
-			
+			}			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			try{
-				if(rs != null)
-					rs.close();
-				if(st != null)
-					st.close();
-				if(conn != null)
-					conn.close();
-			} catch(Exception e){
-				e.printStackTrace();
-			}
-		}		
+			close(rs, st, conn);
+		}
+		
 		return uid;
 	}
 	
 	public static void register(String email, String pw){
-		if(DEBUG) System.out.println(TAG + ": register()");
+		if(DEBUG) System.out.println(TAG + ": register(), Email:"+email+",Password:"+pw);
 		
 		conn = getDBConnection();
 		PreparedStatement ps = null;
@@ -93,49 +81,33 @@ public class DatabaseService {
 			ps.executeUpdate();
 			
 			ps = conn.prepareStatement("INSERT INTO PLAYER_RATING () VALUES()");
-			ps.executeUpdate();
-			
+			ps.executeUpdate();			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			try{
-				if(ps != null)
-					ps.close();
-				if(conn != null)
-					conn.close();
-			} catch(Exception e){
-				e.printStackTrace();
-			}
+			close(ps, conn);
 		}	
 	}
 
 	public static void setPlayerProfile(long uid, String key, String value) {
-		if(DEBUG) System.out.println(TAG + ": setPlayerProfile()");
+		if(DEBUG) System.out.println(TAG + ": setPlayerProfile(), UID:"+uid+",KEY:"+key+",VALUE:"+value);
 		
 		conn = getDBConnection();
 		PreparedStatement ps = null;
 		try {
-			ps = conn.prepareStatement("UPDATE PLAYER_PROFILE SET " + key + " = ? WHERE UID = ?");
+			ps = conn.prepareStatement("UPDATE PLAYER_PROFILE SET "+key+" = ? WHERE UID = ?");
 			ps.setString(1, value);
 			ps.setLong(2, uid);
-			ps.executeUpdate();		
-			
+			ps.executeUpdate();				
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			try{
-				if(ps != null)
-					ps.close();
-				if(conn != null)
-					conn.close();
-			} catch(Exception e){
-				e.printStackTrace();
-			}
+			close(ps, conn);
 		}
 	}
 	
 	public static String getPlayerProfile(long uid, String key) {
-		if(DEBUG) System.out.println(TAG + ": getPlayerProfile()");
+		if(DEBUG) System.out.println(TAG + ": getPlayerProfile(), UID:"+uid+",KEY:"+key);
 
 		String result = null;
 		conn = getDBConnection();
@@ -143,40 +115,30 @@ public class DatabaseService {
 		ResultSet rs = null;
 
 		try {			
-			ps = conn.prepareStatement("SELECT " + key +" FROM PLAYER_PROFILE WHERE UID = ?");
+			ps = conn.prepareStatement("SELECT "+key+" FROM PLAYER_PROFILE WHERE UID = ?");
 			ps.setLong(1, uid);
 			rs = ps.executeQuery();
 			
 			while(rs.next()){
 				result = rs.getString(key);					
 			}
-			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			try{
-				if(rs != null)
-					rs.close();
-				if(ps != null)
-					ps.close();
-				if(conn != null)
-					conn.close();
-			} catch(Exception e){
-				e.printStackTrace();
-			}
+			close(rs, ps, conn);
 		}		
 		
+		if(DEBUG) System.out.println(TAG + ": getPlayerProfile(), UID:"+uid+",KEY:"+key+",RESULT:"+result);
 		return result;
-		
 	}
 	
 	public static void setPlayerRating(long uid, String key, long value) {
-		if(DEBUG) System.out.println(TAG + ": setPlayerRating()");
+		if(DEBUG) System.out.println(TAG + ": setPlayerRating(), UID:"+uid+",KEY:"+key+",VALUE:"+value);
 		
 		conn = getDBConnection();
 		PreparedStatement ps = null;
 		try {
-			ps = conn.prepareStatement("UPDATE PLAYER_RATING SET " + key + " = ? WHERE UID = ?");
+			ps = conn.prepareStatement("UPDATE PLAYER_RATING SET "+key+" = ? WHERE UID = ?");
 			ps.setLong(1, value);
 			ps.setLong(2, uid);
 			ps.executeUpdate();		
@@ -184,19 +146,12 @@ public class DatabaseService {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			try{
-				if(ps != null)
-					ps.close();
-				if(conn != null)
-					conn.close();
-			} catch(Exception e){
-				e.printStackTrace();
-			}
+			close(ps, conn);
 		}
 	}
 	
 	public static int getPlayerRating(long uid, String key) {
-		if(DEBUG) System.out.println(TAG + ": getPlayerRating()");
+		if(DEBUG) System.out.println(TAG + ": getPlayerRating(), UID:"+uid+",KEY:"+key);
 
 		int result = -1;
 		conn = getDBConnection();
@@ -215,19 +170,31 @@ public class DatabaseService {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			try{
-				if(rs != null)
-					rs.close();
-				if(ps != null)
-					ps.close();
-				if(conn != null)
-					conn.close();
-			} catch(Exception e){
-				e.printStackTrace();
-			}
-		}		
+			close(rs, ps, conn);
+		}
+		
+		if(DEBUG) System.out.println(TAG + ": getPlayerRating(), UID:"+uid+",KEY:"+key+",RESULT:"+result);
 		return result;
 	}
 
+	private static void close(Statement st, Connection conn) {
+		try {
+			if (st != null) st.close();
+			if (conn != null) conn.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private static void close(ResultSet rs, Statement st, Connection conn) {
+		try {
+			if (rs != null) rs.close();
+			if (st != null) st.close();
+			if (conn != null) conn.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 }
 

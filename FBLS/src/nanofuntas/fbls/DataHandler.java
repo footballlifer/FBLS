@@ -74,6 +74,8 @@ public class DataHandler {
 	}
 	
 	private static void setNewRating(long uid, String key, JSONObject jsonRating, long totalRated) {
+		if (DEBUG) System.out.println(TAG + ", setNewRating()");	
+		
 		long ratingNow = DatabaseService.getPlayerRating(uid, key);
 		long newRating = (Long) jsonRating.get(key);
 
@@ -85,13 +87,14 @@ public class DataHandler {
 	}
 	
 	private static void setOverallRating(long uid) {
-		long total = 0;
-		
+		if (DEBUG) System.out.println(TAG + ", setOverallRating()");
+
+		long ratingSum = 0;
 		for (String s: Config.RATING_WITHOUT_OVERALL_ARRAY) {
-			total += DatabaseService.getPlayerRating(uid, s);
+			ratingSum += DatabaseService.getPlayerRating(uid, s);
 		}
 				
-		long newOverall = total / Config.RATING_WITHOUT_OVERALL_ARRAY.length;
+		long newOverall = ratingSum / Config.RATING_WITHOUT_OVERALL_ARRAY.length;
 		DatabaseService.setPlayerRating(uid, Config.KEY_OVERALL, newOverall);		
 	}
 	
