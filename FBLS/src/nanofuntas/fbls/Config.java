@@ -20,7 +20,6 @@ public class Config {
 	public static final String KEY_POSITION = "POSITION";	
 
 	// player rating
-	public static final long NUMBER_OF_RATING_ITEM = 13;
 	public static final String KEY_ATTACK = "ATTACK";	
 	public static final String KEY_DEFENSE = "DEFENSE";	
 	public static final String KEY_TEAMWORK = "TEAMWORK";	
@@ -33,7 +32,6 @@ public class Config {
 	public static final String KEY_SHOT = "SHOT";	
 	public static final String KEY_HEADER = "HEADER";	
 	public static final String KEY_CUTTING = "CUTTING";	
-	public static final String KEY_TEMPER = "TEMPER";	
 	public static final String KEY_OVERALL = "OVERALL";	
 	
 	public static final String KEY_UID = "UID";
@@ -64,7 +62,6 @@ public class Config {
 		KEY_SHOT,
 		KEY_HEADER,
 		KEY_CUTTING,
-		KEY_TEMPER,
 		KEY_OVERALL
 	};
 	
@@ -80,8 +77,7 @@ public class Config {
 		KEY_PASS,
 		KEY_SHOT,
 		KEY_HEADER,
-		KEY_CUTTING,
-		KEY_TEMPER
+		KEY_CUTTING
 	};
 	
 }

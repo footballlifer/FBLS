@@ -91,7 +91,7 @@ public class DataHandler {
 			total += DatabaseService.getPlayerRating(uid, s);
 		}
 				
-		long newOverall = total / Config.NUMBER_OF_RATING_ITEM;
+		long newOverall = total / Config.RATING_WITHOUT_OVERALL_ARRAY.length;
 		DatabaseService.setPlayerRating(uid, Config.KEY_OVERALL, newOverall);		
 	}
 	
