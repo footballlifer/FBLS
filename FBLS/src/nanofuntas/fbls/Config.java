@@ -5,15 +5,17 @@ public class Config {
 	// request type
 	public static final String KEY_REQ_TYPE_LOGIN = "REQ_TYPE_LOGIN";
 	public static final String KEY_REQ_TYPE_REGISTER = "REQ_TYPE_REGISTER";
-	public static final String KEY_REQ_TYPE_STATUS = "REQ_TYPE_STATUS";	
-	public static final String KEY_REQ_TYPE_RATING = "REQ_TYPE_RATING";
+	public static final String KEY_REQ_TYPE_PLAYER_STATUS = "REQ_TYPE_PLAYER_STATUS";
+	public static final String KEY_REQ_TYPE_TEAM_STATUS = "REQ_TYPE_TEAM_STATUS";	
+	public static final String KEY_REQ_TYPE_PLAYER_RATING = "REQ_TYPE_PLAYER_RATING";
 	
 	public static final String KEY_RSP_TYPE = "RSP_TYPE";
 	// response type
 	public static final String KEY_RSP_TYPE_LOGIN = "RSP_TYPE_LOGIN";
 	public static final String KEY_RSP_TYPE_REGISTER = "RSP_TYPE_REGISTER";
-	public static final String KEY_RSP_TYPE_STATUS = "RSP_TYPE_STATUS";
-	public static final String KEY_RSP_TYPE_RATING = "RSP_TYPE_RATING";
+	public static final String KEY_RSP_TYPE_PLAYER_STATUS = "RSP_TYPE_PLAYER_STATUS";
+	public static final String KEY_RSP_TYPE_TEAM_STATUS = "RSP_TYPE_TEAM_STATUS";
+	public static final String KEY_RSP_TYPE_PLAYER_RATING = "RSP_TYPE_PLAYER_RATING";
 		
 	// player profile 
 	public static final String KEY_NAME = "NAME";
@@ -34,7 +36,20 @@ public class Config {
 	public static final String KEY_CUTTING = "CUTTING";	
 	public static final String KEY_OVERALL = "OVERALL";	
 	
+	// team profile
+	public static final String KEY_TEAM_NAME = "TEAM_NAME";
+	
+	// team rating
+	public static final String KEY_TEAM_ATK = "ATK";	
+	public static final String KEY_TEAM_DFS = "DFS";	
+	public static final String KEY_TEAM_TEC = "TEC";	
+	public static final String KEY_TEAM_PHY = "PHY";
+	public static final String KEY_TEAM_TWK = "TWK";
+	public static final String KEY_TEAM_MTL = "MTL";	
+	public static final String KEY_TEAM_OVERALL = "OVERALL";
+	
 	public static final String KEY_UID = "UID";
+	public static final String KEY_TID = "TID";
 	public static final String KEY_TOTAL_RATED = "TOTAL_RATED";
 	public static final String KEY_EMAIL = "EMAIL";
 	public static final String KEY_PASSWORD = "PASSWORD";		
@@ -44,12 +59,12 @@ public class Config {
 	
 	public static final String FBL_SETTINGS = "FBL_SETTINGS";
 	
-	public static final String[] PROFILE_ARRAY = {
+	public static final String[] PLAYER_PROFILE_ARRAY = {
 		KEY_NAME,
 		KEY_POSITION
 	};
 	
-	public static final String[] RATING_ALL_ARRAY = {
+	public static final String[] PLAYER_RATING_ALL_ARRAY = {
 		KEY_ATTACK,
 		KEY_DEFENSE,
 		KEY_TEAMWORK,
@@ -65,7 +80,7 @@ public class Config {
 		KEY_OVERALL
 	};
 	
-	public static final String[] RATING_WITHOUT_OVERALL_ARRAY = {
+	public static final String[] PLAYER_RATING_WITHOUT_OVERALL_ARRAY = {
 		KEY_ATTACK,
 		KEY_DEFENSE,
 		KEY_TEAMWORK,
@@ -78,6 +93,29 @@ public class Config {
 		KEY_SHOT,
 		KEY_HEADER,
 		KEY_CUTTING
+	};
+	
+	public static final String[] TEAM_PROFILE_ARRAY = {
+		KEY_TEAM_NAME
+	};
+	
+	public static final String[] TEAM_RATING_ALL_ARRAY = {
+		KEY_TEAM_ATK,
+		KEY_TEAM_DFS,
+		KEY_TEAM_TEC,
+		KEY_TEAM_PHY,
+		KEY_TEAM_TWK,
+		KEY_TEAM_MTL,
+		KEY_TEAM_OVERALL
+	};
+	
+	public static final String[] TEAM_RATING_WITHOUT_OVERALL_ARRAY = {
+		KEY_TEAM_ATK,
+		KEY_TEAM_DFS,
+		KEY_TEAM_TEC,
+		KEY_TEAM_PHY,
+		KEY_TEAM_TWK,
+		KEY_TEAM_MTL
 	};
 	
 }

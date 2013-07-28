@@ -7,6 +7,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.json.simple.JSONObject;
+
 public class DatabaseService {
 	private static boolean DEBUG = true;
 	private static final String TAG = "DataBaseService";
@@ -40,30 +42,47 @@ public class DatabaseService {
 		return conn;
 	}
 	
-	public static long login(String email, String pw){
+	public static JSONObject login(String email, String pw){
 		if(DEBUG) System.out.println(TAG + ": login(), Email:"+email+",Password:"+pw);
 
+		JSONObject result = new JSONObject();
 		long uid = -1; // return -1 if not registered
+		long tid = -1; 
+		
 		conn = getDBConnection();
 		Statement st = null;
+		PreparedStatement ps = null;
 		ResultSet rs = null;
 		
 		try {
 			st = conn.createStatement();
-			rs = st.executeQuery("select * from USER_LOGIN_INFO");
+			rs = st.executeQuery("SELECT * FROM USER_LOGIN_INFO");
 			
 			while(rs.next()) {
 				if( rs.getString(Config.KEY_EMAIL).equals(email) && 
 						rs.getString(Config.KEY_PASSWORD).equals(pw) )
 					uid = rs.getLong(Config.KEY_UID); // return uid for successful login
 			}			
+			
+			// get tid
+			ps = conn.prepareStatement("SELECT TID FROM TEAM_PLAYER WHERE UID = ?");
+			ps.setLong(1, uid);
+			rs = ps.executeQuery();
+			
+			while(rs.next()){
+				tid = rs.getLong(Config.KEY_TID);					
+			}
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			close(rs, st, conn);
+			close(rs, ps, st, conn);
 		}
 		
-		return uid;
+		result.put(Config.KEY_UID, uid);
+		result.put(Config.KEY_TID, tid);
+		
+		return result;
 	}
 	
 	public static void register(String email, String pw){
@@ -177,6 +196,59 @@ public class DatabaseService {
 		return result;
 	}
 
+	public static String getTeamProfile(long tid, String key) {
+		if(DEBUG) System.out.println(TAG + ": getTeamProfile(), TID:"+tid+",KEY:"+key);
+
+		String result = null;
+		conn = getDBConnection();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		try {			
+			ps = conn.prepareStatement("SELECT "+key+" FROM TEAM_PROFILE WHERE TID = ?");
+			ps.setLong(1, tid);
+			rs = ps.executeQuery();
+			
+			while(rs.next()){
+				result = rs.getString(key);					
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(rs, ps, conn);
+		}		
+		
+		if(DEBUG) System.out.println(TAG + ": getTeamProfile(), TID:"+tid+",KEY:"+key+",RESULT:"+result);
+		return result;
+	}
+	
+	public static int getTeamRating(long tid, String key) {
+		if(DEBUG) System.out.println(TAG + ": getTeamRating(), TID:"+tid+",KEY:"+key);
+
+		int result = -1;
+		conn = getDBConnection();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		try {			
+			ps = conn.prepareStatement("SELECT " + key +" FROM TEAM_RATING WHERE TID = ?");
+			ps.setLong(1, tid);
+			rs = ps.executeQuery();
+			
+			while(rs.next()){
+				result = Integer.parseInt( rs.getString(key) );					
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(rs, ps, conn);
+		}
+		
+		if(DEBUG) System.out.println(TAG + ": getPlayerRating(), TID:"+tid+",KEY:"+key+",RESULT:"+result);
+		return result;
+	}
+	
 	private static void close(Statement st, Connection conn) {
 		try {
 			if (st != null) st.close();
@@ -190,6 +262,17 @@ public class DatabaseService {
 		try {
 			if (rs != null) rs.close();
 			if (st != null) st.close();
+			if (conn != null) conn.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private static void close(ResultSet rs, Statement st1, Statement st2, Connection conn) {
+		try {
+			if (rs != null) rs.close();
+			if (st1 != null) st1.close();
+			if (st2 != null) st2.close();
 			if (conn != null) conn.close();
 		} catch (Exception e) {
 			e.printStackTrace();
