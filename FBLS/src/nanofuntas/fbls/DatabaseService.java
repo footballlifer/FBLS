@@ -249,6 +249,105 @@ public class DatabaseService {
 		return result;
 	}
 	
+	public static long createTeam(long uid, String teamName) {
+		if(DEBUG) System.out.println(TAG + ": createTeam(), UID:"+uid+",teamName:"+teamName);
+		
+		long tid = -1;
+		
+		conn = getDBConnection();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		try {
+			ps = conn.prepareStatement("INSERT INTO TEAM_PROFILE (TEAM_NAME) VALUES(?)");
+			ps.setString(1, teamName);
+			ps.executeUpdate();
+			
+			ps = conn.prepareStatement("SELECT TID FROM TEAM_PROFILE WHERE TEAM_NAME = ?");
+			ps.setString(1, teamName);
+			rs = ps.executeQuery();			
+			while(rs.next()){
+				tid = rs.getLong(Config.KEY_TID);			
+			}
+			
+			ps = conn.prepareStatement("INSERT INTO TEAM_PLAYER (TID, UID) VALUES(?, ?)");
+			ps.setLong(1, tid);
+			ps.setLong(2, uid);
+			ps.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(rs, ps, conn);
+		}
+		
+		return tid;
+	}
+	
+	public static long joinTeam(long uid, String teamName) {
+		//TODO:
+		if(DEBUG) System.out.println(TAG + ": joinTeam(), UID:"+uid+",teamName:"+teamName);
+		
+		long tid = -1;
+		
+		conn = getDBConnection();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		try {		
+			ps = conn.prepareStatement("SELECT TID FROM TEAM_PROFILE WHERE TEAM_NAME = ?");
+			ps.setString(1, teamName);
+			rs = ps.executeQuery();			
+			while(rs.next()){
+				tid = rs.getLong(Config.KEY_TID);			
+			}
+			
+			ps = conn.prepareStatement("INSERT INTO TEAM_PLAYER (TID, UID) VALUES(?, ?)");
+			ps.setLong(1, tid);
+			ps.setLong(2, uid);
+			ps.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(rs, ps, conn);
+		}
+		return tid;
+	}
+	
+	public static long incruitPlayer(long tid, String playerName) {
+		//TODO:
+		if(DEBUG) System.out.println(TAG + ": incruitPlayer(), TID:"+tid+",playerName:"+playerName);
+		
+		long uid = -1;
+		
+		conn = getDBConnection();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		try {		
+			ps = conn.prepareStatement("SELECT UID FROM PLAYER_PROFILE WHERE NAME = ?");
+			ps.setString(1, playerName);
+			rs = ps.executeQuery();			
+			while(rs.next()){
+				uid = rs.getLong(Config.KEY_UID);
+			}
+			
+			if (uid > 0) {
+				ps = conn.prepareStatement("INSERT INTO TEAM_PLAYER (TID, UID) VALUES(?, ?)");
+				ps.setLong(1, tid);
+				ps.setLong(2, uid);
+				ps.executeUpdate();
+			} 
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(rs, ps, conn);
+		}
+		return uid;
+	}
+	
 	private static void close(Statement st, Connection conn) {
 		try {
 			if (st != null) st.close();

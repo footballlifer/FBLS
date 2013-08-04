@@ -83,7 +83,48 @@ public class DataHandler {
 			//kakpple test
 			if (DEBUG) System.out.println(TAG + "jsonRsp:" + jsonRsp);
 			
-		}
+		} else if (mReqType.equals(Config.KEY_REQ_TYPE_CREATE_TEAM)) {
+			long uid = (Long) jsonReq.get(Config.KEY_UID);
+			String teamName = (String) jsonReq.get(Config.KEY_TEAM_NAME);
+
+			long result = DatabaseService.createTeam(uid, teamName);
+			jsonRsp.put(Config.KEY_RSP_TYPE, Config.KEY_RSP_TYPE_CREATE_TEAM);
+			jsonRsp.put(Config.KEY_RESULT, result);
+			//kakpple test
+			if (DEBUG) System.out.println(TAG + "jsonRsp:" + jsonRsp);
+			
+		} else if (mReqType.equals(Config.KEY_REQ_TYPE_JOIN_TEAM)) {
+			long uid = (Long) jsonReq.get(Config.KEY_UID);
+			String teamName = (String) jsonReq.get(Config.KEY_TEAM_NAME);
+
+			long result = DatabaseService.joinTeam(uid, teamName);
+			jsonRsp.put(Config.KEY_RSP_TYPE, Config.KEY_RSP_TYPE_JOIN_TEAM);
+			jsonRsp.put(Config.KEY_RESULT, result);
+			//kakpple test
+			if (DEBUG) System.out.println(TAG + "jsonRsp:" + jsonRsp);
+			
+		} else if (mReqType.equals(Config.KEY_REQ_TYPE_INCRUIT_PLAYER)) {
+			long tid = (Long) jsonReq.get(Config.KEY_TID);
+			String playerName = (String) jsonReq.get(Config.KEY_NAME);
+
+			long result = DatabaseService.incruitPlayer(tid, playerName);
+			jsonRsp.put(Config.KEY_RSP_TYPE, Config.KEY_RSP_TYPE_INCRUIT_PLAYER);
+			jsonRsp.put(Config.KEY_RESULT, result);
+			//kakpple test
+			if (DEBUG) System.out.println(TAG + "jsonRsp:" + jsonRsp);
+			
+		} else if (mReqType.equals(Config.KEY_REQ_TYPE_UPDATA_MY_INFO)) {
+			/*	
+			long uid = (Long) jsonReq.get(Config.KEY_UID);
+			String playerName = (String) jsonReq.get(Config.KEY_NAME);
+
+			long result = DatabaseService.incruitPlayer(tid, playerName);
+			jsonRsp.put(Config.KEY_RSP_TYPE, Config.KEY_RSP_TYPE_INCRUIT_PLAYER);
+			jsonRsp.put(Config.KEY_RESULT, result);
+			//kakpple test
+			if (DEBUG) System.out.println(TAG + "jsonRsp:" + jsonRsp);
+			*/
+		} 
 		return jsonRsp;		
 	}
 	

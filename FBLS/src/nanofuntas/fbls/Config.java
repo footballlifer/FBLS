@@ -1,22 +1,30 @@
 package nanofuntas.fbls;
 
 public class Config {
-	public static final String KEY_REQ_TYPE = "REQ_TYPE";
 	// request type
+	public static final String KEY_REQ_TYPE = "REQ_TYPE";
 	public static final String KEY_REQ_TYPE_LOGIN = "REQ_TYPE_LOGIN";
 	public static final String KEY_REQ_TYPE_REGISTER = "REQ_TYPE_REGISTER";
 	public static final String KEY_REQ_TYPE_PLAYER_STATUS = "REQ_TYPE_PLAYER_STATUS";
 	public static final String KEY_REQ_TYPE_TEAM_STATUS = "REQ_TYPE_TEAM_STATUS";	
 	public static final String KEY_REQ_TYPE_PLAYER_RATING = "REQ_TYPE_PLAYER_RATING";
+	public static final String KEY_REQ_TYPE_CREATE_TEAM = "REQ_TYPE_CREATE_TEAM";
+	public static final String KEY_REQ_TYPE_JOIN_TEAM = "REQ_TYPE_JOIN_TEAM";
+	public static final String KEY_REQ_TYPE_INCRUIT_PLAYER = "REQ_TYPE_INCRUIT_PLAYER";
+	public static final String KEY_REQ_TYPE_UPDATA_MY_INFO = "REQ_TYPE_UPDATA_MY_INFO";
 	
-	public static final String KEY_RSP_TYPE = "RSP_TYPE";
 	// response type
+	public static final String KEY_RSP_TYPE = "RSP_TYPE";
 	public static final String KEY_RSP_TYPE_LOGIN = "RSP_TYPE_LOGIN";
 	public static final String KEY_RSP_TYPE_REGISTER = "RSP_TYPE_REGISTER";
 	public static final String KEY_RSP_TYPE_PLAYER_STATUS = "RSP_TYPE_PLAYER_STATUS";
 	public static final String KEY_RSP_TYPE_TEAM_STATUS = "RSP_TYPE_TEAM_STATUS";
 	public static final String KEY_RSP_TYPE_PLAYER_RATING = "RSP_TYPE_PLAYER_RATING";
-		
+	public static final String KEY_RSP_TYPE_CREATE_TEAM	= "RSP_TYPE_CREATE_TEAM";
+	public static final String KEY_RSP_TYPE_JOIN_TEAM = "RSP_TYPE_JOIN_TEAM";
+	public static final String KEY_RSP_TYPE_INCRUIT_PLAYER = "RSP_TYPE_INCRUIT_PLAYER";
+	public static final String KEY_RSP_TYPE_UPDATA_MY_INFO = "RSP_TYPE_UPDATA_MY_INFO";
+	
 	// player profile 
 	public static final String KEY_NAME = "NAME";
 	public static final String KEY_POSITION = "POSITION";	
