@@ -113,17 +113,19 @@ public class DataHandler {
 			//kakpple test
 			if (DEBUG) System.out.println(TAG + "jsonRsp:" + jsonRsp);
 			
-		} else if (mReqType.equals(Config.KEY_REQ_TYPE_UPDATA_MY_INFO)) {
-			/*	
+		} else if (mReqType.equals(Config.KEY_REQ_TYPE_UPDATA_PLAYER_PROFILE)) {
 			long uid = (Long) jsonReq.get(Config.KEY_UID);
-			String playerName = (String) jsonReq.get(Config.KEY_NAME);
-
-			long result = DatabaseService.incruitPlayer(tid, playerName);
-			jsonRsp.put(Config.KEY_RSP_TYPE, Config.KEY_RSP_TYPE_INCRUIT_PLAYER);
-			jsonRsp.put(Config.KEY_RESULT, result);
-			//kakpple test
+			JSONObject myProfile = (JSONObject) jsonReq.get(Config.KEY_PLAYER_PROFILE);
+			
+			String value = null;
+			for (String s : Config.PLAYER_PROFILE_ARRAY) {
+				value = (String) myProfile.get(s);
+				DatabaseService.setPlayerProfile(uid, s, value);
+			}
+			
+			jsonRsp.put(Config.KEY_RSP_TYPE, Config.KEY_RSP_TYPE_UPDATA_PLAYER_PROFILE);
+			jsonRsp.put(Config.KEY_RESULT, Config.KEY_OK);
 			if (DEBUG) System.out.println(TAG + "jsonRsp:" + jsonRsp);
-			*/
 		} 
 		return jsonRsp;		
 	}
