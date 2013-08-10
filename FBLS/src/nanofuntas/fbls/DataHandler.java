@@ -80,9 +80,6 @@ public class DataHandler {
 				jsonRsp.put(s, DatabaseService.getTeamRating(tid, s));
 			}
 			
-			//kakpple test
-			if (DEBUG) System.out.println(TAG + "jsonRsp:" + jsonRsp);
-			
 		} else if (mReqType.equals(Config.KEY_REQ_TYPE_CREATE_TEAM)) {
 			long uid = (Long) jsonReq.get(Config.KEY_UID);
 			String teamName = (String) jsonReq.get(Config.KEY_TEAM_NAME);
@@ -90,8 +87,6 @@ public class DataHandler {
 			long result = DatabaseService.createTeam(uid, teamName);
 			jsonRsp.put(Config.KEY_RSP_TYPE, Config.KEY_RSP_TYPE_CREATE_TEAM);
 			jsonRsp.put(Config.KEY_RESULT, result);
-			//kakpple test
-			if (DEBUG) System.out.println(TAG + "jsonRsp:" + jsonRsp);
 			
 		} else if (mReqType.equals(Config.KEY_REQ_TYPE_JOIN_TEAM)) {
 			long uid = (Long) jsonReq.get(Config.KEY_UID);
@@ -100,8 +95,6 @@ public class DataHandler {
 			long result = DatabaseService.joinTeam(uid, teamName);
 			jsonRsp.put(Config.KEY_RSP_TYPE, Config.KEY_RSP_TYPE_JOIN_TEAM);
 			jsonRsp.put(Config.KEY_RESULT, result);
-			//kakpple test
-			if (DEBUG) System.out.println(TAG + "jsonRsp:" + jsonRsp);
 			
 		} else if (mReqType.equals(Config.KEY_REQ_TYPE_INCRUIT_PLAYER)) {
 			long tid = (Long) jsonReq.get(Config.KEY_TID);
@@ -110,8 +103,6 @@ public class DataHandler {
 			long result = DatabaseService.incruitPlayer(tid, playerName);
 			jsonRsp.put(Config.KEY_RSP_TYPE, Config.KEY_RSP_TYPE_INCRUIT_PLAYER);
 			jsonRsp.put(Config.KEY_RESULT, result);
-			//kakpple test
-			if (DEBUG) System.out.println(TAG + "jsonRsp:" + jsonRsp);
 			
 		} else if (mReqType.equals(Config.KEY_REQ_TYPE_UPDATA_PLAYER_PROFILE)) {
 			long uid = (Long) jsonReq.get(Config.KEY_UID);
@@ -125,8 +116,18 @@ public class DataHandler {
 			
 			jsonRsp.put(Config.KEY_RSP_TYPE, Config.KEY_RSP_TYPE_UPDATA_PLAYER_PROFILE);
 			jsonRsp.put(Config.KEY_RESULT, Config.KEY_OK);
-			if (DEBUG) System.out.println(TAG + "jsonRsp:" + jsonRsp);
+			
+		} else if (mReqType.equals(Config.KEY_REQ_TYPE_GET_MEMBERS_PROFILE)) {
+			long tid = (Long) jsonReq.get(Config.KEY_TID);
+			
+			JSONObject jsonMembersProfile = DatabaseService.getMembersProfile(tid);
+			
+			jsonRsp.put(Config.KEY_RSP_TYPE, Config.KEY_RSP_TYPE_GET_MEMBERS_PROFILE);
+			jsonRsp.put(Config.KEY_RESULT, jsonMembersProfile);
+			
 		} 
+		
+		if (DEBUG) System.out.println(TAG + " jsonRsp:" + jsonRsp);
 		return jsonRsp;		
 	}
 	

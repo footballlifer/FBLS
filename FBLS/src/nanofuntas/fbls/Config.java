@@ -12,6 +12,7 @@ public class Config {
 	public static final String KEY_REQ_TYPE_JOIN_TEAM = "REQ_TYPE_JOIN_TEAM";
 	public static final String KEY_REQ_TYPE_INCRUIT_PLAYER = "REQ_TYPE_INCRUIT_PLAYER";
 	public static final String KEY_REQ_TYPE_UPDATA_PLAYER_PROFILE = "REQ_TYPE_UPDATA_PLAYER_PROFILE";
+	public static final String KEY_REQ_TYPE_GET_MEMBERS_PROFILE = "REQ_TYPE_GET_MEMBERS_PROFILE";
 	
 	// response type
 	public static final String KEY_RSP_TYPE = "RSP_TYPE";
@@ -24,6 +25,7 @@ public class Config {
 	public static final String KEY_RSP_TYPE_JOIN_TEAM = "RSP_TYPE_JOIN_TEAM";
 	public static final String KEY_RSP_TYPE_INCRUIT_PLAYER = "RSP_TYPE_INCRUIT_PLAYER";
 	public static final String KEY_RSP_TYPE_UPDATA_PLAYER_PROFILE = "RSP_TYPE_UPDATA_PLAYER_PROFILE";
+	public static final String KEY_RSP_TYPE_GET_MEMBERS_PROFILE = "RSP_TYPE_GET_MEMBERS_PROFILE";
 	
 	// player profile 
 	public static final String KEY_NAME = "NAME";
@@ -65,6 +67,7 @@ public class Config {
 	public static final String KEY_OK = "OK";
 	public static final String KEY_RATING = "RATING";
 	public static final String KEY_PLAYER_PROFILE = "RATING";
+	public static final String KEY_MEMBERS_COUNT = "MEMBERS_COUNT";
 	
 	public static final String FBL_SETTINGS = "FBL_SETTINGS";
 	

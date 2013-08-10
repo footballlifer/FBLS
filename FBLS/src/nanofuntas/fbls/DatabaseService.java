@@ -285,7 +285,6 @@ public class DatabaseService {
 	}
 	
 	public static long joinTeam(long uid, String teamName) {
-		//TODO:
 		if(DEBUG) System.out.println(TAG + ": joinTeam(), UID:"+uid+",teamName:"+teamName);
 		
 		long tid = -1;
@@ -316,7 +315,6 @@ public class DatabaseService {
 	}
 	
 	public static long incruitPlayer(long tid, String playerName) {
-		//TODO:
 		if(DEBUG) System.out.println(TAG + ": incruitPlayer(), TID:"+tid+",playerName:"+playerName);
 		
 		long uid = -1;
@@ -346,6 +344,45 @@ public class DatabaseService {
 			close(rs, ps, conn);
 		}
 		return uid;
+	}
+	
+	public static JSONObject getMembersProfile(long tid) {
+		// TODO Auto-generated method stub
+		if(DEBUG) System.out.println(TAG + ": getMembersProfile(), TID:"+tid);
+		
+		long uid = -1;
+		long count = 0;
+		JSONObject profile = null;
+		JSONObject jsonMembersProfile = new JSONObject();
+		
+		conn = getDBConnection();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		try {		
+			ps = conn.prepareStatement("SELECT UID FROM TEAM_PLAYER WHERE TID = ?");
+			ps.setLong(1, tid);
+			rs = ps.executeQuery();			
+			while(rs.next()){
+				count ++;
+				uid = rs.getLong(Config.KEY_UID);
+				profile = new JSONObject();
+				
+				profile.put(Config.KEY_UID, uid);
+				
+				for (String s : Config.PLAYER_PROFILE_ARRAY) {
+					profile.put(s, getPlayerProfile(uid, s));
+				}
+				jsonMembersProfile.put(Long.toString(count), profile);
+			}
+			jsonMembersProfile.put(Config.KEY_MEMBERS_COUNT, count);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(rs, ps, conn);
+		}
+		return jsonMembersProfile;
 	}
 	
 	private static void close(Statement st, Connection conn) {
