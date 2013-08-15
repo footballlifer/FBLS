@@ -347,7 +347,6 @@ public class DatabaseService {
 	}
 	
 	public static JSONObject getMembersProfile(long tid) {
-		// TODO Auto-generated method stub
 		if(DEBUG) System.out.println(TAG + ": getMembersProfile(), TID:"+tid);
 		
 		long uid = -1;
@@ -384,6 +383,51 @@ public class DatabaseService {
 		}
 		return jsonMembersProfile;
 	}
+
+	public static JSONObject getMembersStatus(long tid) {
+		// TODO Auto-generated method stub
+		if(DEBUG) System.out.println(TAG + ": getMembersStatus(), TID:"+tid);
+		
+		long uid = -1;
+		long count = 0;
+		JSONObject status = null;
+		JSONObject jsonMembersStatus = new JSONObject();
+		
+		conn = getDBConnection();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		try {		
+			ps = conn.prepareStatement("SELECT UID FROM TEAM_PLAYER WHERE TID = ?");
+			ps.setLong(1, tid);
+			rs = ps.executeQuery();			
+			while(rs.next()){
+				count ++;
+				uid = rs.getLong(Config.KEY_UID);
+				status = new JSONObject();
+				
+				status.put(Config.KEY_UID, uid);
+				
+				for (String s : Config.PLAYER_PROFILE_ARRAY) {
+					status.put(s, getPlayerProfile(uid, s));
+				}
+				
+				for (String s : Config.PLAYER_RATING_ALL_ARRAY) {
+					status.put(s, getPlayerRating(uid, s));
+				}
+				
+				jsonMembersStatus.put(Long.toString(count), status);
+			}
+			jsonMembersStatus.put(Config.KEY_MEMBERS_COUNT, count);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(rs, ps, conn);
+		}
+		return jsonMembersStatus;
+	}
+	
 	
 	private static void close(Statement st, Connection conn) {
 		try {

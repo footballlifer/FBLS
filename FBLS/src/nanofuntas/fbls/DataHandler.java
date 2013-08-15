@@ -117,15 +117,25 @@ public class DataHandler {
 			jsonRsp.put(Config.KEY_RSP_TYPE, Config.KEY_RSP_TYPE_UPDATA_PLAYER_PROFILE);
 			jsonRsp.put(Config.KEY_RESULT, Config.KEY_OK);
 			
-		} else if (mReqType.equals(Config.KEY_REQ_TYPE_GET_MEMBERS_PROFILE)) {
+		} else if (mReqType.equals(Config.KEY_REQ_TYPE_MEMBERS_PROFILE)) {
 			long tid = (Long) jsonReq.get(Config.KEY_TID);
 			
 			JSONObject jsonMembersProfile = DatabaseService.getMembersProfile(tid);
 			
-			jsonRsp.put(Config.KEY_RSP_TYPE, Config.KEY_RSP_TYPE_GET_MEMBERS_PROFILE);
+			jsonRsp.put(Config.KEY_RSP_TYPE, Config.KEY_RSP_TYPE_MEMBERS_PROFILE);
 			jsonRsp.put(Config.KEY_RESULT, jsonMembersProfile);
 			
-		} 
+		} else if (mReqType.equals(Config.KEY_REQ_TYPE_MEMBERS_STATUS)) {
+			//TODO
+			
+			long tid = (Long) jsonReq.get(Config.KEY_TID);
+			
+			JSONObject jsonMembersStatus = DatabaseService.getMembersStatus(tid);
+			
+			jsonRsp.put(Config.KEY_RSP_TYPE, Config.KEY_RSP_TYPE_MEMBERS_STATUS);
+			jsonRsp.put(Config.KEY_RESULT, jsonMembersStatus);
+			
+		}
 		
 		if (DEBUG) System.out.println(TAG + " jsonRsp:" + jsonRsp);
 		return jsonRsp;		
