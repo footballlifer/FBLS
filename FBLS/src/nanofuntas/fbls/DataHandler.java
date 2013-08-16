@@ -46,6 +46,7 @@ public class DataHandler {
 			long uid = (Long) jsonReq.get(Config.KEY_UID);			
 			jsonRsp.put(Config.KEY_RSP_TYPE, Config.KEY_RSP_TYPE_PLAYER_STATUS);
 			
+			jsonRsp.put(Config.KEY_UID, uid);
 			for (String s: Config.PLAYER_PROFILE_ARRAY) {
 				jsonRsp.put(s, DatabaseService.getPlayerProfile(uid, s));
 			}
