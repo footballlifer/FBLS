@@ -1,8 +1,5 @@
 package nanofuntas.fbls;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -10,7 +7,6 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 
-import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -29,7 +25,8 @@ public class FBLServlet extends HttpServlet {
 
 	private final boolean DEBUG = true;
 	private final String TAG = "FBLServlet";
-	
+	//TODO image test
+	public static String PATH = null;
     /**
      * Default constructor. 
      */
@@ -41,7 +38,7 @@ public class FBLServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		PrintWriter out = response.getWriter();	
-		out.write("1");
+		out.write("1");		
 	}
 
 	/**
@@ -50,44 +47,10 @@ public class FBLServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if(DEBUG) System.out.println(TAG + ": doPost()");						
 		
-		//TODO: image test
-		if (request.getHeader("Content-type").equals("image/png")) {
-			System.out.println("Content-type:image/png");
-			
-			String absoluteStuffPath = getServletContext().getRealPath("/");
-			System.out.println("kakpple path:"+absoluteStuffPath);
-			
-			String path = absoluteStuffPath + "cr" + ".png";
-			BufferedImage bImageFromConvert = ImageIO.read(request.getInputStream());
-			
-			ImageIO.write(bImageFromConvert, "png", new File(path));
-		} else if (request.getHeader("Content-type").equals("get/image")) {
-			System.out.println("mytype-type:get/image");
-			
-			String absoluteStuffPath = getServletContext().getRealPath("/");
-			System.out.println("kakpple path:"+absoluteStuffPath);
-			
-			String path = absoluteStuffPath + "cr" + ".png";
-			
-			FileInputStream in = new FileInputStream(path);
-			OutputStream outputstream = response.getOutputStream();
-
-		    // Copy the contents of the file to the output stream
-			byte[] buf = new byte[1024];
-			int count = 0;
-			while ((count = in.read(buf)) >= 0) {
-				outputstream.write(buf, 0, count);
-			}
-			outputstream.close();
-		    in.close();
-			
-		} 
-		else {
-			// get JSON request parameters handle it and finally send it
-			JSONObject jsonReq = getJsonReq(request);		
-			JSONObject jsonRsp = DataHandler.handleData(jsonReq);		
-			sendJsonRsp(response, jsonRsp);
-		}
+		// get JSON request parameters handle it and finally send it
+		JSONObject jsonReq = getJsonReq(request);		
+		JSONObject jsonRsp = DataHandler.handleData(jsonReq);		
+		sendJsonRsp(response, jsonRsp);
 	}
 
 	/**

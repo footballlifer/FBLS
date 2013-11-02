@@ -14,6 +14,8 @@ public class Config {
 	public static final String KEY_REQ_TYPE_UPDATA_PLAYER_PROFILE = "REQ_TYPE_UPDATA_PLAYER_PROFILE";
 	public static final String KEY_REQ_TYPE_MEMBERS_PROFILE = "REQ_TYPE_MEMBERS_PROFILE";
 	public static final String KEY_REQ_TYPE_MEMBERS_STATUS = "REQ_TYPE_MEMBERS_STATUS";
+	public static final String KEY_REQ_TYPE_IMG_UPLOAD = "REQ_TYPE_IMG_UPLOAD";
+	public static final String KEY_REQ_TYPE_IMG_DOWNLOAD = "REQ_TYPE_IMG_DOWNLOAD";
 	
 	// response type
 	public static final String KEY_RSP_TYPE = "RSP_TYPE";
@@ -28,6 +30,8 @@ public class Config {
 	public static final String KEY_RSP_TYPE_UPDATA_PLAYER_PROFILE = "RSP_TYPE_UPDATA_PLAYER_PROFILE";
 	public static final String KEY_RSP_TYPE_MEMBERS_PROFILE = "RSP_TYPE_MEMBERS_PROFILE";
 	public static final String KEY_RSP_TYPE_MEMBERS_STATUS = "RSP_TYPE_MEMBERS_STATUS";
+	public static final String KEY_RSP_TYPE_IMG_UPLOAD = "RSP_TYPE_IMG_UPLOAD";
+	public static final String KEY_RSP_TYPE_IMG_DOWNLOAD = "RSP_TYPE_IMG_DOWNLOAD";
 	
 	// player profile 
 	public static final String KEY_NAME = "NAME";
@@ -70,6 +74,7 @@ public class Config {
 	public static final String KEY_RATING = "RATING";
 	public static final String KEY_PLAYER_PROFILE = "RATING";
 	public static final String KEY_MEMBERS_COUNT = "MEMBERS_COUNT";
+	public static final String KEY_IMAGE = "IMAGE";
 	
 	public static final String FBL_SETTINGS = "FBL_SETTINGS";
 	

@@ -1,6 +1,19 @@
 package nanofuntas.fbls;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+
+import javax.imageio.ImageIO;
+
+import org.apache.commons.codec.binary.Base64;
 import org.json.simple.JSONObject;
+
 /**
  * This DataHandler class receives data from servlet, 
  * and handle data and finally returns data to servlet 
@@ -126,9 +139,7 @@ public class DataHandler {
 			jsonRsp.put(Config.KEY_RSP_TYPE, Config.KEY_RSP_TYPE_MEMBERS_PROFILE);
 			jsonRsp.put(Config.KEY_RESULT, jsonMembersProfile);
 			
-		} else if (mReqType.equals(Config.KEY_REQ_TYPE_MEMBERS_STATUS)) {
-			//TODO
-			
+		} else if (mReqType.equals(Config.KEY_REQ_TYPE_MEMBERS_STATUS)) {			
 			long tid = (Long) jsonReq.get(Config.KEY_TID);
 			
 			JSONObject jsonMembersStatus = DatabaseService.getMembersStatus(tid);
@@ -136,8 +147,74 @@ public class DataHandler {
 			jsonRsp.put(Config.KEY_RSP_TYPE, Config.KEY_RSP_TYPE_MEMBERS_STATUS);
 			jsonRsp.put(Config.KEY_RESULT, jsonMembersStatus);
 			
-		}
-		
+		} else if (mReqType.equals(Config.KEY_REQ_TYPE_IMG_UPLOAD)) {
+			long uid = (Long) jsonReq.get(Config.KEY_UID);
+			
+			String strImage = (String) jsonReq.get(Config.KEY_IMAGE);
+			byte[] bytesImage = Base64.decodeBase64(strImage);
+
+			String absoluteStuffPath = FBLServlet.PATH;
+			String path = absoluteStuffPath + uid + ".png";
+			InputStream in = null;
+			try {
+				in = new ByteArrayInputStream(bytesImage);
+				BufferedImage bImageFromConvert = ImageIO.read(in);
+				ImageIO.write(bImageFromConvert, "png", new File(path));
+			} catch (IOException e) {
+				e.printStackTrace();
+			} finally {
+				if (in != null)
+					try {
+						in.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+			}
+			jsonRsp.put(Config.KEY_RSP_TYPE, Config.KEY_RSP_TYPE_IMG_UPLOAD);
+			jsonRsp.put(Config.KEY_RESULT, Config.KEY_OK);
+			
+		} else if (mReqType.equals(Config.KEY_REQ_TYPE_IMG_DOWNLOAD)) {
+			long uid = (Long) jsonReq.get(Config.KEY_UID);
+			System.out.println("$$$$$$,uid:" + uid);
+
+			String absoluteStuffPath = FBLServlet.PATH;
+			String path = absoluteStuffPath + uid + ".png";		
+			FileInputStream in = null;
+			try {
+				in = new FileInputStream(path);
+			} catch (FileNotFoundException e1) {
+				e1.printStackTrace();
+			} 
+			
+		    ByteArrayOutputStream byteArrayOutStrm = new ByteArrayOutputStream();
+
+		    int lenth;
+		    int bufferSize = 1024;
+			byte[] buffer = new byte[bufferSize];
+			byte[] outbytes = null;
+			
+		    try {
+				while ((lenth = in.read(buffer, 0, buffer.length)) != -1) {
+					byteArrayOutStrm.write(buffer, 0, lenth);
+				}
+		    	byteArrayOutStrm.flush();
+		    	outbytes = byteArrayOutStrm.toByteArray();
+				
+			} catch (IOException e) {
+				e.printStackTrace();
+			} finally {
+				try {
+					if (in != null)	in.close();
+					if (byteArrayOutStrm != null) byteArrayOutStrm.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}	    			
+	    	String strImage = Base64.encodeBase64String(outbytes);
+			jsonRsp.put(Config.KEY_RSP_TYPE, Config.KEY_RSP_TYPE_IMG_DOWNLOAD);
+	    	jsonRsp.put(Config.KEY_IMAGE, strImage);
+			
+		} 
 		if (DEBUG) System.out.println(TAG + " jsonRsp:" + jsonRsp);
 		return jsonRsp;		
 	}
