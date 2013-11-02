@@ -175,7 +175,6 @@ public class DataHandler {
 			
 		} else if (mReqType.equals(Config.KEY_REQ_TYPE_IMG_DOWNLOAD)) {
 			long uid = (Long) jsonReq.get(Config.KEY_UID);
-			System.out.println("$$$$$$,uid:" + uid);
 
 			String absoluteStuffPath = FBLServlet.PATH;
 			String path = absoluteStuffPath + uid + ".png";		
