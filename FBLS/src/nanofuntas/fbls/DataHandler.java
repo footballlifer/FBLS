@@ -176,14 +176,23 @@ public class DataHandler {
 		} else if (mReqType.equals(Config.KEY_REQ_TYPE_IMG_DOWNLOAD)) {
 			long uid = (Long) jsonReq.get(Config.KEY_UID);
 
+			jsonRsp.put(Config.KEY_RSP_TYPE, Config.KEY_RSP_TYPE_IMG_DOWNLOAD);
+
 			String absoluteStuffPath = FBLServlet.PATH;
 			String path = absoluteStuffPath + uid + ".png";		
 			FileInputStream in = null;
+			
+			File f = new File(path);
+			if (!f.exists()) { 
+				jsonRsp.put(Config.KEY_IMAGE, null);
+				return jsonRsp;
+			} 
+			
 			try {
 				in = new FileInputStream(path);
 			} catch (FileNotFoundException e1) {
 				e1.printStackTrace();
-			} 
+			}
 			
 		    ByteArrayOutputStream byteArrayOutStrm = new ByteArrayOutputStream();
 
@@ -210,7 +219,6 @@ public class DataHandler {
 				}
 			}	    			
 	    	String strImage = Base64.encodeBase64String(outbytes);
-			jsonRsp.put(Config.KEY_RSP_TYPE, Config.KEY_RSP_TYPE_IMG_DOWNLOAD);
 	    	jsonRsp.put(Config.KEY_IMAGE, strImage);
 			
 		} 
