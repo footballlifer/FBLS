@@ -157,9 +157,12 @@ public class DataHandler {
 			String path = absoluteStuffPath + uid + ".png";
 			InputStream in = null;
 			try {
-				in = new ByteArrayInputStream(bytesImage);
+				in = new ByteArrayInputStream(bytesImage);	
 				BufferedImage bImageFromConvert = ImageIO.read(in);
-				ImageIO.write(bImageFromConvert, "png", new File(path));
+			
+				if (bImageFromConvert != null) {
+					ImageIO.write(bImageFromConvert, "png", new File(path));
+				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			} finally {
