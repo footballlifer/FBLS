@@ -1,0 +1,190 @@
+//FBLS sql script
+
+CREATE USER 'testuser'@'localhost' IDENTIFIED BY '123';
+GRANT ALL PRIVILEGES ON *.* TO 'testuser'@'localhost' WITH GRANT OPTION;
+CREATE DATABASE db;
+
+create table USER_LOGIN_INFO ( 
+	UID int not null auto_increment primary key, 
+	EMAIL varchar(60) not null, 
+	PASSWORD varchar(30) not null);
+
+create table PLAYER_PROFILE ( 
+	UID int not null auto_increment primary key, 
+	NAME varchar(30), 
+	POSITION varchar(10));
+
+create table PLAYER_RATING ( 
+	UID int not null auto_increment primary key, 
+	TOTAL_RATED int default 0, 
+	ATTACK int default 0, 
+	DEFENSE int default 0, 
+	TEAMWORK int default 0, 
+	MENTAL int default 0, 
+	POWER int default 0, 
+	SPEED int default 0, 
+	STAMINA int default 0, 
+	BALL_CONTROL int default 0, 
+	PASS int default 0, 
+	SHOT int default 0, 
+	HEADER int default 0, 
+	CUTTING int default 0, 
+	OVERALL int default 0);
+
+create table TEAM_PROFILE ( 
+	TID int not null auto_increment primary key, 
+	TEAM_NAME varchar(30));
+
+create table TEAM_RATING (
+	TID int not null auto_increment primary key, 
+	ATK int default 0, 
+	DFS int default 0, 
+	TEC int default 0, 
+	PHY int default 0, 
+	TWK int default 0, 
+	MTL int default 0, 
+	OVERALL int default 0);
+
+create table TEAM_PLAYER (TID int not null, UID int not null);
+
+drop table USER_LOGIN_INFO;
+drop table PLAYER_PROFILE;
+drop table PLAYER_RATING;
+drop table TEAM_PROFILE;
+drop table TEAM_RATING;
+drop table TEAM_PLAYER;
+
+// test commends
+update player_rating set TOTAL_RATED = 2, ATTACK = 92, DEFENSE = 61, TEAMWORK = 62, MENTAL = 76, POWER = 94, SPEED = 85, STAMINA = 71, BALL_CONTROL = 83, PASS = 73, SHOT = 92, HEADER = 89, CUTTING = 63, OVERALL = 80  where uid =1;
+
+update player_rating set TOTAL_RATED = 0, ATTACK = 0, DEFENSE = 0, TEAMWORK = 0, MENTAL = 0, POWER = 0, SPEED = 0, STAMINA = 0, BALL_CONTROL = 0, PASS = 0, SHOT = 0, HEADER = 0, CUTTING = 0, OVERALL = 0  where uid =1;
+
+// test commands
+insert into user_login_info (EMAIL, PASSWORD) values('wys', 'wys');
+insert into user_login_info (EMAIL, PASSWORD) values('jch', 'jch');
+insert into user_login_info (EMAIL, PASSWORD) values('sjj', 'sjj');
+insert into user_login_info (EMAIL, PASSWORD) values('jds', 'jds');
+insert into user_login_info (EMAIL, PASSWORD) values('lhh', 'lhh');
+insert into user_login_info (EMAIL, PASSWORD) values('cdx', 'cdx');
+
+insert into player_profile (NAME, POSITION) values('wys','CF');
+insert into player_profile (NAME, POSITION) values('jch','MD');
+insert into player_profile (NAME, POSITION) values('sjj','MD');
+insert into player_profile (NAME, POSITION) values('jds','MD');
+insert into player_profile (NAME, POSITION) values('lhh','CB');
+insert into player_profile (NAME, POSITION) values('cdx','SB');
+
+insert into player_rating (TOTAL_RATED, ATTACK, DEFENSE, TEAMWORK, MENTAL, POWER, SPEED, STAMINA, BALL_CONTROL, PASS, SHOT, HEADER, CUTTING, OVERALL) values(1, 85, 30, 75, 80, 85, 80, 70, 80, 75, 85, 85, 34, 85);
+insert into player_rating (TOTAL_RATED, ATTACK, DEFENSE, TEAMWORK, MENTAL, POWER, SPEED, STAMINA, BALL_CONTROL, PASS, SHOT, HEADER, CUTTING, OVERALL) values(1, 85, 35, 70, 75, 70, 85, 75, 85, 80, 80, 65, 35, 80);
+insert into player_rating (TOTAL_RATED, ATTACK, DEFENSE, TEAMWORK, MENTAL, POWER, SPEED, STAMINA, BALL_CONTROL, PASS, SHOT, HEADER, CUTTING, OVERALL) values(1, 75, 80, 85, 80, 85, 80, 85, 75, 75, 85, 90, 70, 85);
+insert into player_rating (TOTAL_RATED, ATTACK, DEFENSE, TEAMWORK, MENTAL, POWER, SPEED, STAMINA, BALL_CONTROL, PASS, SHOT, HEADER, CUTTING, OVERALL) values(1, 80, 85, 80, 80, 80, 85, 90, 80, 80, 85, 85, 75, 85);
+insert into player_rating (TOTAL_RATED, ATTACK, DEFENSE, TEAMWORK, MENTAL, POWER, SPEED, STAMINA, BALL_CONTROL, PASS, SHOT, HEADER, CUTTING, OVERALL) values(1, 50, 90, 80, 90, 85, 85, 95, 65, 70, 65, 80, 80, 80);
+insert into player_rating (TOTAL_RATED, ATTACK, DEFENSE, TEAMWORK, MENTAL, POWER, SPEED, STAMINA, BALL_CONTROL, PASS, SHOT, HEADER, CUTTING, OVERALL) values(1, 70, 75, 80, 75, 75, 75, 80, 75, 75, 70, 70, 70, 75);
+
+insert into team_profile (TEAM_NAME) values('5678');
+
+insert into team_rating (ATK, DFS, TEC, PHY, TWK, MTL, OVERALL) values(80, 75, 75, 75, 80, 80, 80);
+
+insert into team_player (TID, UID) values(1, 1);
+insert into team_player (TID, UID) values(1, 2);
+insert into team_player (TID, UID) values(1, 3);
+insert into team_player (TID, UID) values(1, 4);
+insert into team_player (TID, UID) values(1, 5);
+insert into team_player (TID, UID) values(1, 6);
+
+
+
+//References below
+
+CREATE DATABASE  IF NOT EXISTS `qqsng` /*!40100 DEFAULT CHARACTER SET utf8 */;
+USE `qqsng`;
+-- MySQL dump 10.13  Distrib 5.5.16, for Win32 (x86)
+--
+-- Host: localhost    Database: qqsng
+-- ------------------------------------------------------
+-- Server version	5.5.28-log
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `friend_map`
+--
+
+DROP TABLE IF EXISTS `friend_map`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `friend_map` (
+  `he` varchar(100) NOT NULL,
+  `she` varchar(100) NOT NULL,
+  KEY `speedindex` (`he`,`she`),
+  KEY `he__idx` (`he`),
+  KEY `she__idx` (`she`),
+  CONSTRAINT `she_` FOREIGN KEY (`she`) REFERENCES `userinfo` (`uid`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `he_` FOREIGN KEY (`he`) REFERENCES `userinfo` (`uid`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `friend_map`
+--
+
+LOCK TABLES `friend_map` WRITE;
+/*!40000 ALTER TABLE `friend_map` DISABLE KEYS */;
+/*!40000 ALTER TABLE `friend_map` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `userinfo`
+--
+
+DROP TABLE IF EXISTS `userinfo`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `userinfo` (
+  `uid` varchar(100) NOT NULL,
+  `score` int(11) DEFAULT '0',
+  `heart` varchar(45) DEFAULT '0',
+  `gold` varchar(45) DEFAULT NULL,
+  `register_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`uid`),
+  UNIQUE KEY `udi_UNIQUE` (`uid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `userinfo`
+--
+
+LOCK TABLES `userinfo` WRITE;
+/*!40000 ALTER TABLE `userinfo` DISABLE KEYS */;
+INSERT INTO `userinfo` VALUES ('test_udi',100,'100','100','2012-01-01 00:00:00');
+/*!40000 ALTER TABLE `userinfo` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping routines for database 'qqsng'
+--
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2012-12-08 18:55:25
+
+//References above
+
+

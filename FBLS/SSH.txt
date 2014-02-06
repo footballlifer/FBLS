@@ -1,0 +1,30 @@
+- SSH:
+ssh -p 22 jyl@111.207.243.179
+password: tmaxtop1
+
+- FTP:
+ftp 111.207.243.179
+name: jyl
+password: tmaxtop1
+ftp 》 put ~/Desktop/Test.apk ~/wys/Test.apk
+
+- DOWNLOAD TacticBoard.apk
+http://111.207.243.179:9999/DownloadServlet/DownloadServlet
+
+- DOWNLOAD FBL.apk
+http://111.207.243.179:9998/DFBL/DFBL
+
+
+
+
+// not used now here below
+
+ssh -p 1222 up@111.207.243.179
+password: UTSoft110*
+
+su -jyl
+password: tmaxtop1
+
+sudo
+password: Hjdjfhg09*@456
+
