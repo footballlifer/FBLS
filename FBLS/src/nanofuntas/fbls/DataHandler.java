@@ -93,6 +93,9 @@ public class DataHandler {
 			for (String s: Config.TEAM_LEVEL_ALL_ARRAY) { 
 				jsonRsp.put(s, DatabaseService.getTeamLevel(tid, s));
 			}
+			for (String s: Config.TEAM_RATING_ALL_ARRAY) { 
+				jsonRsp.put(s, DatabaseService.getTeamRating(tid, s));				
+			}
 			
 		} else if (mReqType.equals(Config.KEY_REQ_TYPE_CREATE_TEAM)) {
 			long uid = (Long) jsonReq.get(Config.KEY_UID);

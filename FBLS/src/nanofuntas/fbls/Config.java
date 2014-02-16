@@ -137,4 +137,20 @@ public class Config {
 		KEY_TEAM_MTL
 	};
 	
+	public static final String[] TEAM_RATING_ALL_ARRAY = {
+		KEY_ATTACK,
+		KEY_DEFENSE,
+		KEY_TEAMWORK,
+		KEY_MENTAL,
+		KEY_POWER,
+		KEY_SPEED,
+		KEY_STAMINA,
+		KEY_BALL_CONTROL,
+		KEY_PASS,
+		KEY_SHOT,
+		KEY_HEADER,
+		KEY_CUTTING,
+		KEY_OVERALL
+	};
+	
 }

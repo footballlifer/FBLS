@@ -249,6 +249,33 @@ public class DatabaseService {
 		return result;
 	}
 	
+	public static int getTeamRating(long tid, String key) {
+		if(DEBUG) System.out.println(TAG + ": getTeamRating(), TID:"+tid+",KEY:"+key);
+
+		int result = -1;
+		conn = getDBConnection();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		try {			
+			ps = conn.prepareStatement("SELECT " + key +" FROM TEAM_RATING WHERE TID = ?");
+			ps.setLong(1, tid);
+			rs = ps.executeQuery();
+			
+			while(rs.next()){
+				result = Integer.parseInt( rs.getString(key) );					
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(rs, ps, conn);
+		}
+		
+		if(DEBUG) System.out.println(TAG + ": getTeamRating(), TID:"+tid+",KEY:"+key+",RESULT:"+result);
+		return result;
+	}
+	
 	public static long createTeam(long uid, String teamName) {
 		if(DEBUG) System.out.println(TAG + ": createTeam(), UID:"+uid+",teamName:"+teamName);
 		
@@ -261,6 +288,14 @@ public class DatabaseService {
 		try {
 			ps = conn.prepareStatement("INSERT INTO TEAM_PROFILE (TEAM_NAME) VALUES(?)");
 			ps.setString(1, teamName);
+			ps.executeUpdate();
+			
+			ps = conn.prepareStatement("INSERT INTO TEAM_LEVEL (OVERALL) VALUES(?)");
+			ps.setInt(1, 0);
+			ps.executeUpdate();
+			
+			ps = conn.prepareStatement("INSERT INTO TEAM_RATING (OVERALL) VALUES(?)");
+			ps.setInt(1, 0);
 			ps.executeUpdate();
 			
 			ps = conn.prepareStatement("SELECT TID FROM TEAM_PROFILE WHERE TEAM_NAME = ?");
