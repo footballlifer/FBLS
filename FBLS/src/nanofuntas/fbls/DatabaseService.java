@@ -222,8 +222,8 @@ public class DatabaseService {
 		return result;
 	}
 	
-	public static int getTeamRating(long tid, String key) {
-		if(DEBUG) System.out.println(TAG + ": getTeamRating(), TID:"+tid+",KEY:"+key);
+	public static int getTeamLevel(long tid, String key) {
+		if(DEBUG) System.out.println(TAG + ": getTeamLevel(), TID:"+tid+",KEY:"+key);
 
 		int result = -1;
 		conn = getDBConnection();
@@ -231,7 +231,7 @@ public class DatabaseService {
 		ResultSet rs = null;
 
 		try {			
-			ps = conn.prepareStatement("SELECT " + key +" FROM TEAM_RATING WHERE TID = ?");
+			ps = conn.prepareStatement("SELECT " + key +" FROM TEAM_LEVEL WHERE TID = ?");
 			ps.setLong(1, tid);
 			rs = ps.executeQuery();
 			
@@ -245,7 +245,7 @@ public class DatabaseService {
 			close(rs, ps, conn);
 		}
 		
-		if(DEBUG) System.out.println(TAG + ": getPlayerRating(), TID:"+tid+",KEY:"+key+",RESULT:"+result);
+		if(DEBUG) System.out.println(TAG + ": getTeamLevel(), TID:"+tid+",KEY:"+key+",RESULT:"+result);
 		return result;
 	}
 	

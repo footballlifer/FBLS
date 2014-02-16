@@ -35,7 +35,7 @@ create table TEAM_PROFILE (
 	TID int not null auto_increment primary key, 
 	TEAM_NAME varchar(30));
 
-create table TEAM_RATING (
+create table TEAM_LEVEL (
 	TID int not null auto_increment primary key, 
 	ATK int default 0, 
 	DFS int default 0, 
@@ -45,21 +45,34 @@ create table TEAM_RATING (
 	MTL int default 0, 
 	OVERALL int default 0);
 
+create table TEAM_RATING ( 
+	TID int not null auto_increment primary key, 
+	TOTAL_RATED int default 0, 
+	ATTACK int default 0, 
+	DEFENSE int default 0, 
+	TEAMWORK int default 0, 
+	MENTAL int default 0, 
+	POWER int default 0, 
+	SPEED int default 0, 
+	STAMINA int default 0, 
+	BALL_CONTROL int default 0, 
+	PASS int default 0, 
+	SHOT int default 0, 
+	HEADER int default 0, 
+	CUTTING int default 0, 
+	OVERALL int default 0);
+
 create table TEAM_PLAYER (TID int not null, UID int not null);
 
+
+// drop table commands and insert test data
 drop table USER_LOGIN_INFO;
 drop table PLAYER_PROFILE;
 drop table PLAYER_RATING;
 drop table TEAM_PROFILE;
-drop table TEAM_RATING;
+drop table TEAM_LEVEL;
 drop table TEAM_PLAYER;
 
-// test commends
-update player_rating set TOTAL_RATED = 2, ATTACK = 92, DEFENSE = 61, TEAMWORK = 62, MENTAL = 76, POWER = 94, SPEED = 85, STAMINA = 71, BALL_CONTROL = 83, PASS = 73, SHOT = 92, HEADER = 89, CUTTING = 63, OVERALL = 80  where uid =1;
-
-update player_rating set TOTAL_RATED = 0, ATTACK = 0, DEFENSE = 0, TEAMWORK = 0, MENTAL = 0, POWER = 0, SPEED = 0, STAMINA = 0, BALL_CONTROL = 0, PASS = 0, SHOT = 0, HEADER = 0, CUTTING = 0, OVERALL = 0  where uid =1;
-
-// test commands
 insert into user_login_info (EMAIL, PASSWORD) values('wys', 'wys');
 insert into user_login_info (EMAIL, PASSWORD) values('jch', 'jch');
 insert into user_login_info (EMAIL, PASSWORD) values('sjj', 'sjj');
@@ -83,7 +96,9 @@ insert into player_rating (TOTAL_RATED, ATTACK, DEFENSE, TEAMWORK, MENTAL, POWER
 
 insert into team_profile (TEAM_NAME) values('5678');
 
-insert into team_rating (ATK, DFS, TEC, PHY, TWK, MTL, OVERALL) values(80, 75, 75, 75, 80, 80, 80);
+insert into team_level (ATK, DFS, TEC, PHY, TWK, MTL, OVERALL) values(80, 75, 75, 75, 80, 80, 80);
+
+insert into team_rating (TOTAL_RATED, ATTACK, DEFENSE, TEAMWORK, MENTAL, POWER, SPEED, STAMINA, BALL_CONTROL, PASS, SHOT, HEADER, CUTTING, OVERALL) values(1, 85, 30, 75, 80, 85, 80, 70, 80, 75, 85, 85, 34, 85);
 
 insert into team_player (TID, UID) values(1, 1);
 insert into team_player (TID, UID) values(1, 2);
@@ -92,6 +107,10 @@ insert into team_player (TID, UID) values(1, 4);
 insert into team_player (TID, UID) values(1, 5);
 insert into team_player (TID, UID) values(1, 6);
 
+// test commends
+update player_rating set TOTAL_RATED = 2, ATTACK = 92, DEFENSE = 61, TEAMWORK = 62, MENTAL = 76, POWER = 94, SPEED = 85, STAMINA = 71, BALL_CONTROL = 83, PASS = 73, SHOT = 92, HEADER = 89, CUTTING = 63, OVERALL = 80  where uid =1;
+
+update player_rating set TOTAL_RATED = 0, ATTACK = 0, DEFENSE = 0, TEAMWORK = 0, MENTAL = 0, POWER = 0, SPEED = 0, STAMINA = 0, BALL_CONTROL = 0, PASS = 0, SHOT = 0, HEADER = 0, CUTTING = 0, OVERALL = 0  where uid =1;
 
 
 //References below

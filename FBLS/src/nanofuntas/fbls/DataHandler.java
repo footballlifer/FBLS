@@ -90,8 +90,8 @@ public class DataHandler {
 			for (String s: Config.TEAM_PROFILE_ARRAY) {
 				jsonRsp.put(s, DatabaseService.getTeamProfile(tid, s));
 			}
-			for (String s: Config.TEAM_RATING_ALL_ARRAY) { 
-				jsonRsp.put(s, DatabaseService.getTeamRating(tid, s));
+			for (String s: Config.TEAM_LEVEL_ALL_ARRAY) { 
+				jsonRsp.put(s, DatabaseService.getTeamLevel(tid, s));
 			}
 			
 		} else if (mReqType.equals(Config.KEY_REQ_TYPE_CREATE_TEAM)) {

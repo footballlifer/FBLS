@@ -118,7 +118,7 @@ public class Config {
 		KEY_TEAM_NAME
 	};
 	
-	public static final String[] TEAM_RATING_ALL_ARRAY = {
+	public static final String[] TEAM_LEVEL_ALL_ARRAY = {
 		KEY_TEAM_ATK,
 		KEY_TEAM_DFS,
 		KEY_TEAM_TEC,
@@ -128,7 +128,7 @@ public class Config {
 		KEY_TEAM_OVERALL
 	};
 	
-	public static final String[] TEAM_RATING_WITHOUT_OVERALL_ARRAY = {
+	public static final String[] TEAM_LEVEL_WITHOUT_OVERALL_ARRAY = {
 		KEY_TEAM_ATK,
 		KEY_TEAM_DFS,
 		KEY_TEAM_TEC,
