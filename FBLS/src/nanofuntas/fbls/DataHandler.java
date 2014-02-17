@@ -268,10 +268,14 @@ public class DataHandler {
 		
 		List<Integer> playerIDs = DatabaseService.getPlayerIdsForTeam(tid);
 		
+		int counter = 0;
 		for (int uid : playerIDs) {
+			if (DatabaseService.getPlayerRating(uid, "TOTAL_RATED") == 0) continue;
 			for (String s: Config.PLAYER_RATING_WITHOUT_OVERALL_ARRAY) {
-				ratingSum += DatabaseService.getPlayerRating(uid, s);
+				int rating = DatabaseService.getPlayerRating(uid, s);
+				average.put(s, rating);
 			}
+			counter++;
 		}
 		/*
 		for (String s: Config.PLAYER_RATING_WITHOUT_OVERALL_ARRAY) {
