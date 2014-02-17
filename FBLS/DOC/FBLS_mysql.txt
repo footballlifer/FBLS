@@ -4,6 +4,15 @@ CREATE USER 'testuser'@'localhost' IDENTIFIED BY '123';
 GRANT ALL PRIVILEGES ON *.* TO 'testuser'@'localhost' WITH GRANT OPTION;
 CREATE DATABASE db;
 
+// drop table commands and insert test data
+drop table USER_LOGIN_INFO;
+drop table PLAYER_PROFILE;
+drop table PLAYER_RATING;
+drop table TEAM_PROFILE;
+drop table TEAM_LEVEL;
+drop table TEAM_RATING;
+drop table TEAM_PLAYER;
+
 create table USER_LOGIN_INFO ( 
 	UID int not null auto_increment primary key, 
 	EMAIL varchar(60) not null, 
@@ -64,16 +73,6 @@ create table TEAM_RATING (
 
 create table TEAM_PLAYER (TID int not null, UID int not null);
 
-
-// drop table commands and insert test data
-drop table USER_LOGIN_INFO;
-drop table PLAYER_PROFILE;
-drop table PLAYER_RATING;
-drop table TEAM_PROFILE;
-drop table TEAM_LEVEL;
-drop table TEAM_RATING;
-drop table TEAM_PLAYER;
-
 insert into user_login_info (EMAIL, PASSWORD) values('wys', 'wys');
 insert into user_login_info (EMAIL, PASSWORD) values('jch', 'jch');
 insert into user_login_info (EMAIL, PASSWORD) values('sjj', 'sjj');
@@ -110,8 +109,11 @@ insert into team_player (TID, UID) values(1, 6);
 
 // test commends
 update player_rating set TOTAL_RATED = 2, ATTACK = 92, DEFENSE = 61, TEAMWORK = 62, MENTAL = 76, POWER = 94, SPEED = 85, STAMINA = 71, BALL_CONTROL = 83, PASS = 73, SHOT = 92, HEADER = 89, CUTTING = 63, OVERALL = 80  where uid =1;
-
 update player_rating set TOTAL_RATED = 0, ATTACK = 0, DEFENSE = 0, TEAMWORK = 0, MENTAL = 0, POWER = 0, SPEED = 0, STAMINA = 0, BALL_CONTROL = 0, PASS = 0, SHOT = 0, HEADER = 0, CUTTING = 0, OVERALL = 0  where uid =1;
+
+
+
+
 
 
 //References below

@@ -8,6 +8,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 
@@ -73,7 +76,7 @@ public class DataHandler {
 			long totalRated = DatabaseService.getPlayerRating(uid, Config.KEY_TOTAL_RATED);
 			
 			for (String s: Config.PLAYER_RATING_WITHOUT_OVERALL_ARRAY) {
-				setNewRating(uid, s, jsonRating, totalRated);
+				updatePlayerRating(uid, s, jsonRating, totalRated);
 			}
 
 			totalRated ++;
@@ -232,7 +235,7 @@ public class DataHandler {
 		return jsonRsp;		
 	}
 	
-	private static void setNewRating(long uid, String key, JSONObject jsonRating, long totalRated) {
+	private static void updatePlayerRating(long uid, String key, JSONObject jsonRating, long totalRated) {
 		if (DEBUG) System.out.println(TAG + ", setNewRating()");	
 		
 		long ratingNow = DatabaseService.getPlayerRating(uid, key);
@@ -256,5 +259,29 @@ public class DataHandler {
 		long newOverall = ratingSum / Config.PLAYER_RATING_WITHOUT_OVERALL_ARRAY.length;
 		DatabaseService.setPlayerRating(uid, Config.KEY_OVERALL, newOverall);		
 	}
+	
+	private static void updateTeamRating(long tid) {
+		if (DEBUG) System.out.println(TAG + ", updateTeamRating()");
+
+		long ratingSum = 0;
+		Map<String, Integer> average = new LinkedHashMap<String, Integer>();
+		
+		List<Integer> playerIDs = DatabaseService.getPlayerIdsForTeam(tid);
+		
+		for (int uid : playerIDs) {
+			for (String s: Config.PLAYER_RATING_WITHOUT_OVERALL_ARRAY) {
+				ratingSum += DatabaseService.getPlayerRating(uid, s);
+			}
+		}
+		/*
+		for (String s: Config.PLAYER_RATING_WITHOUT_OVERALL_ARRAY) {
+			ratingSum += DatabaseService.getPlayerRating(uid, s);
+		}
+				
+		long newOverall = ratingSum / Config.PLAYER_RATING_WITHOUT_OVERALL_ARRAY.length;
+		DatabaseService.setPlayerRating(uid, Config.KEY_OVERALL, newOverall);		
+		*/
+	}
+	
 	
 }

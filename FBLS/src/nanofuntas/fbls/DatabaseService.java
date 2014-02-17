@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import org.json.simple.JSONObject;
 
@@ -273,6 +274,51 @@ public class DatabaseService {
 		}
 		
 		if(DEBUG) System.out.println(TAG + ": getTeamRating(), TID:"+tid+",KEY:"+key+",RESULT:"+result);
+		return result;
+	}
+	
+	public static void setTeamRating(long tid, String key, long value) {
+		if(DEBUG) System.out.println(TAG + ": setTeamRating(), TID:"+tid+",KEY:"+key+",VALUE:"+value);
+		
+		conn = getDBConnection();
+		PreparedStatement ps = null;
+		try {
+			ps = conn.prepareStatement("UPDATE TEAM_RATING SET "+key+" = ? WHERE TID = ?");
+			ps.setLong(1, value);
+			ps.setLong(2, tid);
+			ps.executeUpdate();		
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(ps, conn);
+		}
+	}
+
+	public static ArrayList<Integer> getPlayerIdsForTeam(long tid) {
+		if(DEBUG) System.out.println(TAG + ": getPlayerIdsForTeam(), TID:"+tid);
+		
+		ArrayList<Integer> result = new ArrayList<Integer>();
+		conn = getDBConnection();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		try {			
+			ps = conn.prepareStatement("SELECT UID FROM TEAM_PLAYER WHERE TID = ?");
+			ps.setLong(1, tid);
+			rs = ps.executeQuery();
+			
+			while(rs.next()){
+				result.add(rs.getInt("UID"));					
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(rs, ps, conn);
+		}
+		
+		if(DEBUG) System.out.println(TAG + ": getPlayerIdsForTeam(), TID:"+tid+",RESULT:"+result);
 		return result;
 	}
 	
