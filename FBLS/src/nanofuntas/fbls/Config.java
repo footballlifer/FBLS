@@ -36,6 +36,10 @@ public class Config {
 	// player profile 
 	public static final String KEY_NAME = "NAME";
 	public static final String KEY_POSITION = "POSITION";	
+	public static final String KEY_AGE = "AGE";	
+	public static final String KEY_HEIGHT = "HEIGHT";	
+	public static final String KEY_WEIGHT = "WEIGHT";	
+	public static final String KEY_FOOT = "FOOT";
 
 	// player rating
 	public static final String KEY_ATTACK = "ATTACK";	
@@ -80,7 +84,11 @@ public class Config {
 	
 	public static final String[] PLAYER_PROFILE_ARRAY = {
 		KEY_NAME,
-		KEY_POSITION
+		KEY_POSITION,
+		KEY_AGE,
+		KEY_HEIGHT,
+		KEY_WEIGHT,
+		KEY_FOOT
 	};
 	
 	public static final String[] PLAYER_RATING_ALL_ARRAY = {

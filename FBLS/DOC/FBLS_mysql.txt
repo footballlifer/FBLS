@@ -21,7 +21,11 @@ create table USER_LOGIN_INFO (
 create table PLAYER_PROFILE ( 
 	UID int not null auto_increment primary key, 
 	NAME varchar(30), 
-	POSITION varchar(10));
+	POSITION varchar(10),
+	AGE varchar(20),
+	HEIGHT varchar(10),
+	WEIGHT varchar(10),
+	FOOT varchar(10));
 
 create table PLAYER_RATING ( 
 	UID int not null auto_increment primary key, 
@@ -82,12 +86,12 @@ insert into user_login_info (EMAIL, PASSWORD) values('jds', 'jds');
 insert into user_login_info (EMAIL, PASSWORD) values('lhh', 'lhh');
 insert into user_login_info (EMAIL, PASSWORD) values('cdx', 'cdx');
 
-insert into player_profile (NAME, POSITION) values('wys','CF');
-insert into player_profile (NAME, POSITION) values('jch','MD');
-insert into player_profile (NAME, POSITION) values('sjj','MD');
-insert into player_profile (NAME, POSITION) values('jds','MD');
-insert into player_profile (NAME, POSITION) values('lhh','CB');
-insert into player_profile (NAME, POSITION) values('cdx','SB');
+insert into player_profile (NAME, POSITION, AGE, HEIGHT, WEIGHT, FOOT) values('wys','CF','1984','188','76','l');
+insert into player_profile (NAME, POSITION, AGE, HEIGHT, WEIGHT, FOOT) values('jch','MD','1984','168','70','r');
+insert into player_profile (NAME, POSITION, AGE, HEIGHT, WEIGHT, FOOT) values('sjj','MD','1983','182','80','r');
+insert into player_profile (NAME, POSITION, AGE, HEIGHT, WEIGHT, FOOT) values('jds','MD','1983','178','74','r');
+insert into player_profile (NAME, POSITION, AGE, HEIGHT, WEIGHT, FOOT) values('lhh','CB','1984','174','69','r');
+insert into player_profile (NAME, POSITION, AGE, HEIGHT, WEIGHT, FOOT) values('cdx','SB','1984','177','68','r');
 
 insert into player_rating (TOTAL_RATED, ATTACK, DEFENSE, TEAMWORK, MENTAL, POWER, SPEED, STAMINA, BALL_CONTROL, PASS, SHOT, HEADER, CUTTING, OVERALL) values(1, 85, 30, 75, 80, 85, 80, 70, 80, 75, 85, 85, 34, 85);
 insert into player_rating (TOTAL_RATED, ATTACK, DEFENSE, TEAMWORK, MENTAL, POWER, SPEED, STAMINA, BALL_CONTROL, PASS, SHOT, HEADER, CUTTING, OVERALL) values(1, 85, 35, 70, 75, 70, 85, 75, 85, 80, 80, 65, 35, 80);
