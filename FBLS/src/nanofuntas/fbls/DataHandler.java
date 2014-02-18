@@ -83,6 +83,10 @@ public class DataHandler {
 					
 			DatabaseService.setPlayerRating(uid, Config.KEY_TOTAL_RATED, totalRated);
 			setOverallRating(uid);
+			
+			int tid = DatabaseService.getTidForUid(uid);
+			updateTeamRating(tid);
+			
 			jsonRsp.put(Config.KEY_RSP_TYPE, Config.KEY_RSP_TYPE_PLAYER_RATING);
 			jsonRsp.put(Config.KEY_RESULT, Config.KEY_OK);
 			
@@ -264,28 +268,27 @@ public class DataHandler {
 		if (DEBUG) System.out.println(TAG + ", updateTeamRating()");
 
 		long ratingSum = 0;
-		Map<String, Integer> average = new LinkedHashMap<String, Integer>();
+		Map<String, Integer> map = new LinkedHashMap<String, Integer>();
 		
-		List<Integer> playerIDs = DatabaseService.getPlayerIdsForTeam(tid);
+		List<Integer> playerIDs = DatabaseService.getUidsForTid(tid);
 		
-		int counter = 0;
+		int counter = 1;
 		for (int uid : playerIDs) {
-			if (DatabaseService.getPlayerRating(uid, "TOTAL_RATED") == 0) continue;
-			for (String s: Config.PLAYER_RATING_WITHOUT_OVERALL_ARRAY) {
-				int rating = DatabaseService.getPlayerRating(uid, s);
-				average.put(s, rating);
+			if (DatabaseService.getPlayerRating(uid, Config.KEY_TOTAL_RATED) == 0) continue;
+			for (String key: Config.PLAYER_RATING_WITHOUT_OVERALL_ARRAY) {
+				int rating = DatabaseService.getPlayerRating(uid, key);
+				if (map.get(key) == null) {
+					map.put(key, rating);
+				} else {
+					int mean = ( map.get(key) * counter + rating ) / (counter + 1);
+					map.put(key, mean);
+				}
 			}
 			counter++;
 		}
-		/*
-		for (String s: Config.PLAYER_RATING_WITHOUT_OVERALL_ARRAY) {
-			ratingSum += DatabaseService.getPlayerRating(uid, s);
+		
+		for (String key: Config.PLAYER_RATING_WITHOUT_OVERALL_ARRAY) {
+			DatabaseService.setTeamRating(tid, key, map.get(key));
 		}
-				
-		long newOverall = ratingSum / Config.PLAYER_RATING_WITHOUT_OVERALL_ARRAY.length;
-		DatabaseService.setPlayerRating(uid, Config.KEY_OVERALL, newOverall);		
-		*/
 	}
-	
-	
 }

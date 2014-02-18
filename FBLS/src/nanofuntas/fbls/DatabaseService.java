@@ -295,7 +295,7 @@ public class DatabaseService {
 		}
 	}
 
-	public static ArrayList<Integer> getPlayerIdsForTeam(long tid) {
+	public static ArrayList<Integer> getUidsForTid(long tid) {
 		if(DEBUG) System.out.println(TAG + ": getPlayerIdsForTeam(), TID:"+tid);
 		
 		ArrayList<Integer> result = new ArrayList<Integer>();
@@ -320,6 +320,32 @@ public class DatabaseService {
 		
 		if(DEBUG) System.out.println(TAG + ": getPlayerIdsForTeam(), TID:"+tid+",RESULT:"+result);
 		return result;
+	}
+	
+	public static int getTidForUid(long uid) {
+		if(DEBUG) System.out.println(TAG + ": getTidForUid(), UID:"+uid);
+
+		int tid = -1;
+		conn = getDBConnection();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		try {			
+			ps = conn.prepareStatement("SELECT TID FROM TEAM_PLAYER WHERE UID = ?");
+			ps.setLong(1, uid);
+			rs = ps.executeQuery();
+			
+			while(rs.next()){
+				tid = rs.getInt("TID");					
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(rs, ps, conn);
+		}		
+		
+		if(DEBUG) System.out.println(TAG + ": getTidForUid(), UID:"+uid);
+		return tid;
 	}
 	
 	public static long createTeam(long uid, String teamName) {

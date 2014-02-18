@@ -71,7 +71,9 @@ create table TEAM_RATING (
 	CUTTING int default 0, 
 	OVERALL int default 0);
 
-create table TEAM_PLAYER (TID int not null, UID int not null);
+create table TEAM_PLAYER (
+	TID int not null, 
+	UID int not null);
 
 insert into user_login_info (EMAIL, PASSWORD) values('wys', 'wys');
 insert into user_login_info (EMAIL, PASSWORD) values('jch', 'jch');
