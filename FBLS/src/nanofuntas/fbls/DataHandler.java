@@ -31,7 +31,6 @@ public class DataHandler {
 	 * @param jsonReq, JSONObject received from servlet
 	 * @return JSONObject result data to servlet
 	 */
-	@SuppressWarnings("unchecked")
 	public static JSONObject handleData(JSONObject jsonReq) {
 		String mReqType = (String) jsonReq.get(Config.KEY_REQ_TYPE);
 		if (DEBUG) System.out.println(TAG + ", " + mReqType);	
@@ -40,203 +39,251 @@ public class DataHandler {
 		JSONObject jsonRsp = new JSONObject();
 		
 		if (mReqType.equals(Config.KEY_REQ_TYPE_LOGIN)) {
-			String strEmail = (String) jsonReq.get(Config.KEY_EMAIL);
-			String strPassword = (String) jsonReq.get(Config.KEY_PASSWORD);
-
-			JSONObject result = DatabaseService.login(strEmail, strPassword);
-			jsonRsp.put(Config.KEY_RSP_TYPE, Config.KEY_RSP_TYPE_LOGIN);
-			jsonRsp.put(Config.KEY_RESULT, result);
-			
+			loginHandler(jsonReq, jsonRsp);
 		} else if (mReqType.equals(Config.KEY_REQ_TYPE_REGISTER)) {
-			String strEmail = (String) jsonReq.get(Config.KEY_EMAIL);
-			String strPassword = (String) jsonReq.get(Config.KEY_PASSWORD);
-			
-			DatabaseService.register(strEmail, strPassword);	
-			
-			//make sure user is registered and return uid for registering
-			JSONObject result = DatabaseService.login(strEmail, strPassword);
-			jsonRsp.put(Config.KEY_RSP_TYPE, Config.KEY_RSP_TYPE_REGISTER);
-			jsonRsp.put(Config.KEY_RESULT, result);
-			
+			registerHandler(jsonReq, jsonRsp);
 		} else if (mReqType.equals(Config.KEY_REQ_TYPE_PLAYER_STATUS)) {
-			long uid = (Long) jsonReq.get(Config.KEY_UID);			
-			jsonRsp.put(Config.KEY_RSP_TYPE, Config.KEY_RSP_TYPE_PLAYER_STATUS);
-			
-			jsonRsp.put(Config.KEY_UID, uid);
-			for (String s: Config.PLAYER_PROFILE_ARRAY) {
-				jsonRsp.put(s, DatabaseService.getPlayerProfile(uid, s));
-			}
-			for (String s: Config.PLAYER_RATING_ALL_ARRAY) { 
-				jsonRsp.put(s, DatabaseService.getPlayerRating(uid, s));
-			}
-			
+			reqPlayerStatusHandler(jsonReq, jsonRsp);
 		} else if (mReqType.equals(Config.KEY_REQ_TYPE_PLAYER_RATING)) {
-			long uid = (Long) jsonReq.get(Config.KEY_UID);			
-			JSONObject jsonRating = (JSONObject) jsonReq.get(Config.KEY_RATING);
-			long totalRated = DatabaseService.getPlayerRating(uid, Config.KEY_TOTAL_RATED);
-			
-			for (String s: Config.PLAYER_RATING_WITHOUT_OVERALL_ARRAY) {
-				updatePlayerRating(uid, s, jsonRating, totalRated);
-			}
-
-			totalRated ++;
-					
-			DatabaseService.setPlayerRating(uid, Config.KEY_TOTAL_RATED, totalRated);
-			setOverallRating(uid);
-			
-			int tid = DatabaseService.getTidForUid(uid);
-			updateTeamRating(tid);
-			
-			jsonRsp.put(Config.KEY_RSP_TYPE, Config.KEY_RSP_TYPE_PLAYER_RATING);
-			jsonRsp.put(Config.KEY_RESULT, Config.KEY_OK);
-			
+			ratePlayerHandler(jsonReq, jsonRsp);
 		} else if (mReqType.equals(Config.KEY_REQ_TYPE_TEAM_STATUS)) {
-			long tid = (Long) jsonReq.get(Config.KEY_TID);			
-			jsonRsp.put(Config.KEY_RSP_TYPE, Config.KEY_RSP_TYPE_TEAM_STATUS);
-			
-			for (String s: Config.TEAM_PROFILE_ARRAY) {
-				jsonRsp.put(s, DatabaseService.getTeamProfile(tid, s));
-			}
-			for (String s: Config.TEAM_LEVEL_ALL_ARRAY) { 
-				jsonRsp.put(s, DatabaseService.getTeamLevel(tid, s));
-			}
-			for (String s: Config.TEAM_RATING_ALL_ARRAY) { 
-				jsonRsp.put(s, DatabaseService.getTeamRating(tid, s));				
-			}
-			
+			reqTeamStatusHandler(jsonReq, jsonRsp);
 		} else if (mReqType.equals(Config.KEY_REQ_TYPE_CREATE_TEAM)) {
-			long uid = (Long) jsonReq.get(Config.KEY_UID);
-			String teamName = (String) jsonReq.get(Config.KEY_TEAM_NAME);
-
-			long result = DatabaseService.createTeam(uid, teamName);
-			jsonRsp.put(Config.KEY_RSP_TYPE, Config.KEY_RSP_TYPE_CREATE_TEAM);
-			jsonRsp.put(Config.KEY_RESULT, result);
-			
+			createTeamHandler(jsonReq, jsonRsp);
 		} else if (mReqType.equals(Config.KEY_REQ_TYPE_JOIN_TEAM)) {
-			long uid = (Long) jsonReq.get(Config.KEY_UID);
-			String teamName = (String) jsonReq.get(Config.KEY_TEAM_NAME);
-
-			long result = DatabaseService.joinTeam(uid, teamName);
-			jsonRsp.put(Config.KEY_RSP_TYPE, Config.KEY_RSP_TYPE_JOIN_TEAM);
-			jsonRsp.put(Config.KEY_RESULT, result);
-			
+			joinTeamHandler(jsonReq, jsonRsp);
 		} else if (mReqType.equals(Config.KEY_REQ_TYPE_INCRUIT_PLAYER)) {
-			long tid = (Long) jsonReq.get(Config.KEY_TID);
-			String playerName = (String) jsonReq.get(Config.KEY_NAME);
-
-			long result = DatabaseService.incruitPlayer(tid, playerName);
-			jsonRsp.put(Config.KEY_RSP_TYPE, Config.KEY_RSP_TYPE_INCRUIT_PLAYER);
-			jsonRsp.put(Config.KEY_RESULT, result);
-			
+			incruitPlayerHandler(jsonReq, jsonRsp);
 		} else if (mReqType.equals(Config.KEY_REQ_TYPE_UPDATA_PLAYER_PROFILE)) {
-			long uid = (Long) jsonReq.get(Config.KEY_UID);
-			JSONObject myProfile = (JSONObject) jsonReq.get(Config.KEY_PLAYER_PROFILE);
-			
-			String value = null;
-			for (String s : Config.PLAYER_PROFILE_ARRAY) {
-				value = (String) myProfile.get(s);
-				DatabaseService.setPlayerProfile(uid, s, value);
-			}
-			
-			jsonRsp.put(Config.KEY_RSP_TYPE, Config.KEY_RSP_TYPE_UPDATA_PLAYER_PROFILE);
-			jsonRsp.put(Config.KEY_RESULT, Config.KEY_OK);
-			
+			updatePlayerProfileHandler(jsonReq, jsonRsp);
 		} else if (mReqType.equals(Config.KEY_REQ_TYPE_MEMBERS_PROFILE)) {
-			long tid = (Long) jsonReq.get(Config.KEY_TID);
-			
-			JSONObject jsonMembersProfile = DatabaseService.getMembersProfile(tid);
-			
-			jsonRsp.put(Config.KEY_RSP_TYPE, Config.KEY_RSP_TYPE_MEMBERS_PROFILE);
-			jsonRsp.put(Config.KEY_RESULT, jsonMembersProfile);
-			
+			reqTeamProfileHandler(jsonReq, jsonRsp);
 		} else if (mReqType.equals(Config.KEY_REQ_TYPE_MEMBERS_STATUS)) {			
-			long tid = (Long) jsonReq.get(Config.KEY_TID);
-			
-			JSONObject jsonMembersStatus = DatabaseService.getMembersStatus(tid);
-			
-			jsonRsp.put(Config.KEY_RSP_TYPE, Config.KEY_RSP_TYPE_MEMBERS_STATUS);
-			jsonRsp.put(Config.KEY_RESULT, jsonMembersStatus);
-			
+			reqMemberStatusHandler(jsonReq, jsonRsp);
 		} else if (mReqType.equals(Config.KEY_REQ_TYPE_IMG_UPLOAD)) {
-			long uid = (Long) jsonReq.get(Config.KEY_UID);
-			
-			String strImage = (String) jsonReq.get(Config.KEY_IMAGE);
-			byte[] bytesImage = Base64.decodeBase64(strImage);
-
-			String absoluteStuffPath = FBLServlet.PATH;
-			String path = absoluteStuffPath + uid + ".png";
-			InputStream in = null;
-			try {
-				in = new ByteArrayInputStream(bytesImage);	
-				BufferedImage bImageFromConvert = ImageIO.read(in);
-			
-				if (bImageFromConvert != null) {
-					ImageIO.write(bImageFromConvert, "png", new File(path));
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			} finally {
-				if (in != null)
-					try {
-						in.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-			}
-			jsonRsp.put(Config.KEY_RSP_TYPE, Config.KEY_RSP_TYPE_IMG_UPLOAD);
-			jsonRsp.put(Config.KEY_RESULT, Config.KEY_OK);
-			
+			uploadImageHandler(jsonReq, jsonRsp);
 		} else if (mReqType.equals(Config.KEY_REQ_TYPE_IMG_DOWNLOAD)) {
-			long uid = (Long) jsonReq.get(Config.KEY_UID);
-
-			jsonRsp.put(Config.KEY_RSP_TYPE, Config.KEY_RSP_TYPE_IMG_DOWNLOAD);
-
-			String absoluteStuffPath = FBLServlet.PATH;
-			String path = absoluteStuffPath + uid + ".png";		
-			FileInputStream in = null;
-			
-			File f = new File(path);
-			if (!f.exists()) { 
-				jsonRsp.put(Config.KEY_IMAGE, null);
-				return jsonRsp;
-			} 
-			
-			try {
-				in = new FileInputStream(path);
-			} catch (FileNotFoundException e1) {
-				e1.printStackTrace();
-			}
-			
-		    ByteArrayOutputStream byteArrayOutStrm = new ByteArrayOutputStream();
-
-		    int lenth;
-		    int bufferSize = 1024;
-			byte[] buffer = new byte[bufferSize];
-			byte[] outbytes = null;
-			
-		    try {
-				while ((lenth = in.read(buffer, 0, buffer.length)) != -1) {
-					byteArrayOutStrm.write(buffer, 0, lenth);
-				}
-		    	byteArrayOutStrm.flush();
-		    	outbytes = byteArrayOutStrm.toByteArray();
-				
-			} catch (IOException e) {
-				e.printStackTrace();
-			} finally {
-				try {
-					if (in != null)	in.close();
-					if (byteArrayOutStrm != null) byteArrayOutStrm.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}	    			
-	    	String strImage = Base64.encodeBase64String(outbytes);
-	    	jsonRsp.put(Config.KEY_IMAGE, strImage);
-			
+			return downloadImageHandler(jsonReq, jsonRsp);	
 		} 
 		if (DEBUG) System.out.println(TAG + " jsonRsp:" + jsonRsp);
 		return jsonRsp;		
+	}
+
+	private static JSONObject downloadImageHandler(JSONObject jsonReq,
+			JSONObject jsonRsp) {
+		long uid = (Long) jsonReq.get(Config.KEY_UID);
+
+		jsonRsp.put(Config.KEY_RSP_TYPE, Config.KEY_RSP_TYPE_IMG_DOWNLOAD);
+
+		String absoluteStuffPath = FBLServlet.PATH;
+		String path = absoluteStuffPath + uid + ".png";		
+		FileInputStream in = null;
+		
+		File f = new File(path);
+		if (!f.exists()) { 
+			jsonRsp.put(Config.KEY_IMAGE, null);
+			return jsonRsp;
+		} 
+		
+		try {
+			in = new FileInputStream(path);
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+		}
+		
+		ByteArrayOutputStream byteArrayOutStrm = new ByteArrayOutputStream();
+
+		int lenth;
+		int bufferSize = 1024;
+		byte[] buffer = new byte[bufferSize];
+		byte[] outbytes = null;
+		
+		try {
+			while ((lenth = in.read(buffer, 0, buffer.length)) != -1) {
+				byteArrayOutStrm.write(buffer, 0, lenth);
+			}
+			byteArrayOutStrm.flush();
+			outbytes = byteArrayOutStrm.toByteArray();
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (in != null)	in.close();
+				if (byteArrayOutStrm != null) byteArrayOutStrm.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}	    			
+		String strImage = Base64.encodeBase64String(outbytes);
+		jsonRsp.put(Config.KEY_IMAGE, strImage);
+		return jsonRsp;
+	}
+
+	private static void uploadImageHandler(JSONObject jsonReq,
+			JSONObject jsonRsp) {
+		long uid = (Long) jsonReq.get(Config.KEY_UID);
+		
+		String strImage = (String) jsonReq.get(Config.KEY_IMAGE);
+		byte[] bytesImage = Base64.decodeBase64(strImage);
+
+		String absoluteStuffPath = FBLServlet.PATH;
+		String path = absoluteStuffPath + uid + ".png";
+		InputStream in = null;
+		try {
+			in = new ByteArrayInputStream(bytesImage);	
+			BufferedImage bImageFromConvert = ImageIO.read(in);
+		
+			if (bImageFromConvert != null) {
+				ImageIO.write(bImageFromConvert, "png", new File(path));
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (in != null)
+				try {
+					in.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+		}
+		jsonRsp.put(Config.KEY_RSP_TYPE, Config.KEY_RSP_TYPE_IMG_UPLOAD);
+		jsonRsp.put(Config.KEY_RESULT, Config.KEY_OK);
+	}
+
+	private static void reqMemberStatusHandler(JSONObject jsonReq,
+			JSONObject jsonRsp) {
+		long tid = (Long) jsonReq.get(Config.KEY_TID);
+		
+		JSONObject jsonMembersStatus = DatabaseService.getMembersStatus(tid);
+		
+		jsonRsp.put(Config.KEY_RSP_TYPE, Config.KEY_RSP_TYPE_MEMBERS_STATUS);
+		jsonRsp.put(Config.KEY_RESULT, jsonMembersStatus);
+	}
+
+	private static void reqTeamProfileHandler(JSONObject jsonReq,
+			JSONObject jsonRsp) {
+		long tid = (Long) jsonReq.get(Config.KEY_TID);
+		
+		JSONObject jsonMembersProfile = DatabaseService.getMembersProfile(tid);
+		
+		jsonRsp.put(Config.KEY_RSP_TYPE, Config.KEY_RSP_TYPE_MEMBERS_PROFILE);
+		jsonRsp.put(Config.KEY_RESULT, jsonMembersProfile);
+	}
+
+	private static void updatePlayerProfileHandler(JSONObject jsonReq,
+			JSONObject jsonRsp) {
+		long uid = (Long) jsonReq.get(Config.KEY_UID);
+		JSONObject myProfile = (JSONObject) jsonReq.get(Config.KEY_PLAYER_PROFILE);
+		
+		String value = null;
+		for (String s : Config.PLAYER_PROFILE_ARRAY) {
+			value = (String) myProfile.get(s);
+			DatabaseService.setPlayerProfile(uid, s, value);
+		}
+		
+		jsonRsp.put(Config.KEY_RSP_TYPE, Config.KEY_RSP_TYPE_UPDATA_PLAYER_PROFILE);
+		jsonRsp.put(Config.KEY_RESULT, Config.KEY_OK);
+	}
+
+	private static void incruitPlayerHandler(JSONObject jsonReq,
+			JSONObject jsonRsp) {
+		long tid = (Long) jsonReq.get(Config.KEY_TID);
+		String playerName = (String) jsonReq.get(Config.KEY_NAME);
+
+		long result = DatabaseService.incruitPlayer(tid, playerName);
+		jsonRsp.put(Config.KEY_RSP_TYPE, Config.KEY_RSP_TYPE_INCRUIT_PLAYER);
+		jsonRsp.put(Config.KEY_RESULT, result);
+	}
+
+	private static void joinTeamHandler(JSONObject jsonReq, JSONObject jsonRsp) {
+		long uid = (Long) jsonReq.get(Config.KEY_UID);
+		String teamName = (String) jsonReq.get(Config.KEY_TEAM_NAME);
+
+		long result = DatabaseService.joinTeam(uid, teamName);
+		jsonRsp.put(Config.KEY_RSP_TYPE, Config.KEY_RSP_TYPE_JOIN_TEAM);
+		jsonRsp.put(Config.KEY_RESULT, result);
+	}
+
+	private static void createTeamHandler(JSONObject jsonReq, JSONObject jsonRsp) {
+		long uid = (Long) jsonReq.get(Config.KEY_UID);
+		String teamName = (String) jsonReq.get(Config.KEY_TEAM_NAME);
+
+		long result = DatabaseService.createTeam(uid, teamName);
+		jsonRsp.put(Config.KEY_RSP_TYPE, Config.KEY_RSP_TYPE_CREATE_TEAM);
+		jsonRsp.put(Config.KEY_RESULT, result);
+	}
+
+	private static void reqTeamStatusHandler(JSONObject jsonReq,
+			JSONObject jsonRsp) {
+		long tid = (Long) jsonReq.get(Config.KEY_TID);			
+		jsonRsp.put(Config.KEY_RSP_TYPE, Config.KEY_RSP_TYPE_TEAM_STATUS);
+		
+		for (String s: Config.TEAM_PROFILE_ARRAY) {
+			jsonRsp.put(s, DatabaseService.getTeamProfile(tid, s));
+		}
+		for (String s: Config.TEAM_LEVEL_ALL_ARRAY) { 
+			jsonRsp.put(s, DatabaseService.getTeamLevel(tid, s));
+		}
+		for (String s: Config.TEAM_RATING_ALL_ARRAY) { 
+			jsonRsp.put(s, DatabaseService.getTeamRating(tid, s));				
+		}
+	}
+
+	private static void ratePlayerHandler(JSONObject jsonReq, JSONObject jsonRsp) {
+		long uid = (Long) jsonReq.get(Config.KEY_UID);			
+		JSONObject jsonRating = (JSONObject) jsonReq.get(Config.KEY_RATING);
+		long totalRated = DatabaseService.getPlayerRating(uid, Config.KEY_TOTAL_RATED);
+		
+		for (String s: Config.PLAYER_RATING_WITHOUT_OVERALL_ARRAY) {
+			updatePlayerRating(uid, s, jsonRating, totalRated);
+		}
+
+		totalRated ++;
+				
+		DatabaseService.setPlayerRating(uid, Config.KEY_TOTAL_RATED, totalRated);
+		setOverallRating(uid);
+		
+		int tid = DatabaseService.getTidForUid(uid);
+		updateTeamRating(tid);
+		
+		jsonRsp.put(Config.KEY_RSP_TYPE, Config.KEY_RSP_TYPE_PLAYER_RATING);
+		jsonRsp.put(Config.KEY_RESULT, Config.KEY_OK);
+	}
+
+	private static void reqPlayerStatusHandler(JSONObject jsonReq,
+			JSONObject jsonRsp) {
+		long uid = (Long) jsonReq.get(Config.KEY_UID);			
+		jsonRsp.put(Config.KEY_RSP_TYPE, Config.KEY_RSP_TYPE_PLAYER_STATUS);
+		
+		jsonRsp.put(Config.KEY_UID, uid);
+		for (String s: Config.PLAYER_PROFILE_ARRAY) {
+			jsonRsp.put(s, DatabaseService.getPlayerProfile(uid, s));
+		}
+		for (String s: Config.PLAYER_RATING_ALL_ARRAY) { 
+			jsonRsp.put(s, DatabaseService.getPlayerRating(uid, s));
+		}
+	}
+
+	private static void registerHandler(JSONObject jsonReq, JSONObject jsonRsp) {
+		String strEmail = (String) jsonReq.get(Config.KEY_EMAIL);
+		String strPassword = (String) jsonReq.get(Config.KEY_PASSWORD);
+		
+		DatabaseService.register(strEmail, strPassword);	
+		
+		//make sure user is registered and return uid for registering
+		JSONObject result = DatabaseService.login(strEmail, strPassword);
+		jsonRsp.put(Config.KEY_RSP_TYPE, Config.KEY_RSP_TYPE_REGISTER);
+		jsonRsp.put(Config.KEY_RESULT, result);
+	}
+
+	private static void loginHandler(JSONObject jsonReq, JSONObject jsonRsp) {
+		String strEmail = (String) jsonReq.get(Config.KEY_EMAIL);
+		String strPassword = (String) jsonReq.get(Config.KEY_PASSWORD);
+
+		JSONObject result = DatabaseService.login(strEmail, strPassword);
+		jsonRsp.put(Config.KEY_RSP_TYPE, Config.KEY_RSP_TYPE_LOGIN);
+		jsonRsp.put(Config.KEY_RESULT, result);
 	}
 	
 	private static void updatePlayerRating(long uid, String key, JSONObject jsonRating, long totalRated) {

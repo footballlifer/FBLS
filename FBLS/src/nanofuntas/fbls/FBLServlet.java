@@ -26,7 +26,7 @@ public class FBLServlet extends HttpServlet {
 	private final boolean DEBUG = true;
 	private final String TAG = "FBLServlet";
 	//TODO image test
-	public static String PATH = null;
+	public static String PATH;
     /**
      * Default constructor. 
      */
@@ -36,7 +36,8 @@ public class FBLServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+	throws ServletException, IOException {
 		PrintWriter out = response.getWriter();	
 		out.write("1");		
 	}
@@ -44,7 +45,8 @@ public class FBLServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+	throws ServletException, IOException {
 		if(DEBUG) System.out.println(TAG + ": doPost()");						
 		
 		// get JSON request parameters handle it and finally send it
