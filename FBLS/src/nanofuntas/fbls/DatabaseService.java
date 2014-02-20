@@ -250,6 +250,24 @@ public class DatabaseService {
 		return result;
 	}
 	
+	public static void setTeamLevel(long tid, String key, long value) {
+		if(DEBUG) System.out.println(TAG + ": setTeamLevel(), TID:"+tid+",KEY:"+key+",VALUE:"+value);
+		
+		conn = getDBConnection();
+		PreparedStatement ps = null;
+		try {
+			ps = conn.prepareStatement("UPDATE TEAM_LEVEL SET "+key+" = ? WHERE TID = ?");
+			ps.setLong(1, value);
+			ps.setLong(2, tid);
+			ps.executeUpdate();		
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(ps, conn);
+		}
+	}
+	
 	public static int getTeamRating(long tid, String key) {
 		if(DEBUG) System.out.println(TAG + ": getTeamRating(), TID:"+tid+",KEY:"+key);
 

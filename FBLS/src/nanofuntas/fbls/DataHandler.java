@@ -40,30 +40,43 @@ public class DataHandler {
 		
 		if (mReqType.equals(Config.KEY_REQ_TYPE_LOGIN)) {
 			loginHandler(jsonReq, jsonRsp);
+			
 		} else if (mReqType.equals(Config.KEY_REQ_TYPE_REGISTER)) {
 			registerHandler(jsonReq, jsonRsp);
+			
 		} else if (mReqType.equals(Config.KEY_REQ_TYPE_PLAYER_STATUS)) {
 			reqPlayerStatusHandler(jsonReq, jsonRsp);
+			
 		} else if (mReqType.equals(Config.KEY_REQ_TYPE_PLAYER_RATING)) {
 			ratePlayerHandler(jsonReq, jsonRsp);
+			
 		} else if (mReqType.equals(Config.KEY_REQ_TYPE_TEAM_STATUS)) {
 			reqTeamStatusHandler(jsonReq, jsonRsp);
+			
 		} else if (mReqType.equals(Config.KEY_REQ_TYPE_CREATE_TEAM)) {
 			createTeamHandler(jsonReq, jsonRsp);
+			
 		} else if (mReqType.equals(Config.KEY_REQ_TYPE_JOIN_TEAM)) {
 			joinTeamHandler(jsonReq, jsonRsp);
+			
 		} else if (mReqType.equals(Config.KEY_REQ_TYPE_INCRUIT_PLAYER)) {
 			incruitPlayerHandler(jsonReq, jsonRsp);
+			
 		} else if (mReqType.equals(Config.KEY_REQ_TYPE_UPDATA_PLAYER_PROFILE)) {
 			updatePlayerProfileHandler(jsonReq, jsonRsp);
+			
 		} else if (mReqType.equals(Config.KEY_REQ_TYPE_MEMBERS_PROFILE)) {
 			reqTeamProfileHandler(jsonReq, jsonRsp);
+			
 		} else if (mReqType.equals(Config.KEY_REQ_TYPE_MEMBERS_STATUS)) {			
 			reqMemberStatusHandler(jsonReq, jsonRsp);
+			
 		} else if (mReqType.equals(Config.KEY_REQ_TYPE_IMG_UPLOAD)) {
 			uploadImageHandler(jsonReq, jsonRsp);
+			
 		} else if (mReqType.equals(Config.KEY_REQ_TYPE_IMG_DOWNLOAD)) {
 			return downloadImageHandler(jsonReq, jsonRsp);	
+			
 		} 
 		if (DEBUG) System.out.println(TAG + " jsonRsp:" + jsonRsp);
 		return jsonRsp;		
@@ -334,8 +347,46 @@ public class DataHandler {
 			counter++;
 		}
 		
+		int sum = 0;
 		for (String key: Config.PLAYER_RATING_WITHOUT_OVERALL_ARRAY) {
 			DatabaseService.setTeamRating(tid, key, map.get(key));
+			sum += map.get(key);
 		}
+		int overall = (int) ((float)sum / (float)Config.PLAYER_RATING_WITHOUT_OVERALL_ARRAY.length);
+		DatabaseService.setTeamRating(tid, Config.KEY_TEAM_OVERALL, overall);
+		
+		//TODO:
+		// update team level
+		float HUNDRED = 100.0f;
+		
+		int atkRating = map.get(Config.KEY_ATTACK);
+    	int dfsRating = map.get(Config.KEY_DEFENSE);
+    	int twkRating = map.get(Config.KEY_TEAMWORK);
+    	int mtlRating = map.get(Config.KEY_MENTAL);
+    	int powRating = map.get(Config.KEY_POWER);
+    	int spdRating = map.get(Config.KEY_SPEED);
+    	int staRating = map.get(Config.KEY_STAMINA);
+    	int blcRating = map.get(Config.KEY_BALL_CONTROL);
+    	int pasRating = map.get(Config.KEY_PASS);
+    	int shtRating = map.get(Config.KEY_SHOT);
+    	int hdrRating = map.get(Config.KEY_HEADER);
+    	int cutRating = map.get(Config.KEY_CUTTING);
+    	
+    	int atk = (int) atkRating;
+    	int dfs = (int) ((dfsRating + cutRating) / 2.0f);
+    	int twk = (int) twkRating;
+    	int mtl = (int) mtlRating;
+    	int phy = (int) ((powRating + spdRating + staRating) / 3.0f);
+    	int tec = (int) ((blcRating + pasRating + shtRating + hdrRating) / 4.0f);
+    	int ove = (int) ((atk + dfs + twk + mtl + phy + tec) / 6.0f);
+    	
+    	DatabaseService.setTeamLevel(tid, Config.KEY_TEAM_ATK, atk);
+    	DatabaseService.setTeamLevel(tid, Config.KEY_TEAM_DFS, dfs);
+    	DatabaseService.setTeamLevel(tid, Config.KEY_TEAM_TWK, twk);
+    	DatabaseService.setTeamLevel(tid, Config.KEY_TEAM_MTL, mtl);
+    	DatabaseService.setTeamLevel(tid, Config.KEY_TEAM_PHY, phy);
+    	DatabaseService.setTeamLevel(tid, Config.KEY_TEAM_TEC, tec);
+    	DatabaseService.setTeamLevel(tid, Config.KEY_TEAM_OVERALL, ove);
+    	
 	}
 }
