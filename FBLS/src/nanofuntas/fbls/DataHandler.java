@@ -258,7 +258,7 @@ public class DataHandler {
 		setOverallRating(uid);
 		
 		int tid = DatabaseService.getTidForUid(uid);
-		updateTeamRating(tid);
+		updateTeamRatingNLevel(tid);
 		
 		jsonRsp.put(Config.KEY_RSP_TYPE, Config.KEY_RSP_TYPE_PLAYER_RATING);
 		jsonRsp.put(Config.KEY_RESULT, Config.KEY_OK);
@@ -324,12 +324,10 @@ public class DataHandler {
 		DatabaseService.setPlayerRating(uid, Config.KEY_OVERALL, newOverall);		
 	}
 	
-	private static void updateTeamRating(long tid) {
+	private static void updateTeamRatingNLevel(long tid) {
 		if (DEBUG) System.out.println(TAG + ", updateTeamRating()");
 
-		long ratingSum = 0;
 		Map<String, Integer> map = new LinkedHashMap<String, Integer>();
-		
 		List<Integer> playerIDs = DatabaseService.getUidsForTid(tid);
 		
 		int counter = 1;
@@ -355,7 +353,6 @@ public class DataHandler {
 		int overall = (int) ((float)sum / (float)Config.PLAYER_RATING_WITHOUT_OVERALL_ARRAY.length);
 		DatabaseService.setTeamRating(tid, Config.KEY_TEAM_OVERALL, overall);
 		
-		//TODO:
 		// update team level
 		float HUNDRED = 100.0f;
 		
